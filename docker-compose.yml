@@ -5,8 +5,6 @@ web:
     - "8000"
   links:
     - postgres:postgres
-  volumes:
-    - /usr/src/app/static
   env_file: .env
   command: "/usr/local/bin/gunicorn -w 2 -b :8000 api:app"
 
@@ -16,10 +14,7 @@ nginx:
   ports:
     - "80:80"
   volumes:
-    - /www/static
     - ./app:/www/webly
-  volumes_from:
-    - web
   links:
     - web:web
 

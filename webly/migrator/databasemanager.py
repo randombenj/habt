@@ -1,31 +1,41 @@
 import logging
-import web.models
+from webly.models import Base, Package
+from webly.config import Config
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 
 log = logging.getLogger(__name__)
 
 class DatabaseManager():
-    def __init__(self):
-        pass
 
-    @staticmethod
-    def init():
+    def __init__(self):
+        self._connection = create_engine(Config().connection_string, echo=True)
+
+    def init(self):
         '''
             Initializes the Database according
             to the Models
         '''
         log.info('Initialize the database')
+        Base.metadata.create_all(self._connection)
 
-    @staticmethod
-    def destroy():
+    def destroy(self):
         '''
             Destroys the databases
         '''
         log.warn('Destroy the database')
 
-    @staticmethod
-    def migrate():
+    def migrate(self):
         '''
             Initializes the Database according
             to the Models
         '''
         log.info('Starting a database migration')
+        Session = sessionmaker(bind=self._connection)
+
+        package = Package(name="Test Package")
+        session = Session()
+
+        session.add(package)
+        session.commit()
