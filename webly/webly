@@ -11,5 +11,5 @@ def init():
 
 if __name__ == '__main__':
     # Setup the logger configuration
-    Config.setup_logger()
+    Config.setup_logger(level=logging.DEBUG)
     init()

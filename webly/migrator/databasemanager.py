@@ -4,6 +4,7 @@ from webly.config import Config
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from webly.migrator.migrator import Migrator
 
 log = logging.getLogger(__name__)
 
@@ -32,10 +33,12 @@ class DatabaseManager():
             to the Models
         '''
         log.info('Starting a database migration')
-        Session = sessionmaker(bind=self._connection)
 
-        package = Package(name="Test Package")
-        session = Session()
-
-        session.add(package)
-        session.commit()
+        Migrator()
+        # Session = sessionmaker(bind=self._connection)
+        #
+        # package = Package(name="Test Package")
+        # session = Session()
+        #
+        # session.add(package)
+        # session.commit()

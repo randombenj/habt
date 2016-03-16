@@ -6,6 +6,8 @@ web:
   links:
     - postgres:postgres
   env_file: .env
+  volumes:
+    - ./webly:/usr/src/webly
   command: "/usr/local/bin/gunicorn -w 2 -b :8000 api:app"
 
 nginx:

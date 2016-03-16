@@ -1,43 +1,102 @@
 import gzip
-import deb822
 import requests
-from StringIO import StringIO
+from io import StringIO
+from deb822 import Packages, Release
+import logging
+
+log = logging.getLogger(__name__)
 
 class Source():
     def __init__(self, filename):
         self._filename = filename
-        self._source_file = open(self._filename, 'r')
+        self._source_list = SourceList(self._filename)
 
-    def __next__(self):
-        return self.next()
 
-    def next(self):
+    @property
+    def packages(self):
+        for entry in self._source_list.entries:
+            log.info(entry.__dict__)
+        # # removing the '[arch=' and ']' fron the architecture list
+        # for architecture in entry_parts[1][6:-1].split(','):
+        #     # one source list can have multiple components (main, non-free ...)
+        #     for component in entry_parts[4:]:
+        #         response = requests.get('{0}/dists/{1}/{2}/binary-{3}/Packages.gz'.format(
+        #             entry_parts[2],
+        #             entry_parts[3],
+        #             component,
+        #             architecture
+        #         ))
+        #
+        #         if response.ok:
+        #             content = gzip.GzipFile(
+        #                 fileobj=StringIO(response.content)
+        #             ).read()
+        #
+        #             sources.append({
+        #                 'architecture': architecture,
+        #                 'component': component,
+        #                 'packages': Packages.iter_paragraphs(content)
+        #             })
+        #
+        # return sources
 
-        sources = []
 
-        entry = self._source_file.readline
-        entry_parts = entry.split()
+class SourceList():
+    def __init__(self, sources_list_file):
+        self._current_index = 0 # index tracking for the current ge
+        self._raw_sources_list = []
 
-        # removing the '[arch=' and ']' fron the architecture list
-        for architecture in entry_parts[1][6:-1].split(','):
-            # one source list can have multiple components (main, non-free ...)
-            for component in entry_parts[4:]:
-                response = requests.get('{0}/dists/{1}/{2}/binary-{3}/Packages.gz'.format(
-                    entry_parts[2],
-                    entry_parts[3],
-                    component,
-                    architecture
-                ))
+        with open(sources_list_file) as sources_list:
+            # read the sources.list file, remove comments and empty lines
+            self._raw_sources_list = filter(
+                lambda f: not f.startswith('#') and f.strip(),
+                [s.strip() for s in sources_list.readlines()]
+            )
 
-                if response.ok:
-                    content = gzip.GzipFile(
-                        fileobj=StringIO(response.content)
-                    ).read()
+    @property
+    def entries(self):
+        return [SourceListEntry(f) for f in self._raw_sources_list]
 
-                    sources.append({
-                        'architecture': architecture,
-                        'component': component,
-                        'packages': deb822.Packages.iter_paragraphs(content)
-                    })
 
-        return sources
+class SourceListEntry():
+    def __init__(self, source):
+        self._source_list = source.split()
+        self._architectures = []
+        # the architectures don't have to be set
+        has_defined_architectures = self._source_list[1].startswith('[')
+        if has_defined_architectures:
+            # removing the '[arch=' and ']' fron the architecture list
+            self._architectures = self._source_list[1][6:-1].split(',')
+
+        offset = 1 if has_defined_architectures else 0
+
+        # load components of the sources list
+        self._origin = self._source_list[1 + offset]
+        self._distribution = self._source_list[2 + offset]
+        # one source list can have multiple components (main, non-free ...)
+        self._parts = self._source_list[3 + offset:]
+
+        response = requests.get(
+            '{0}/dists/{1}/Release'.format(self._origin, self._distribution)
+        )
+
+        if response.ok:
+            self._release = next(Release.iter_paragraphs(response.text))
+            if not self._architectures:
+                self._architectures = self._release['Architectures'].split()
+
+    @property
+    def origin(self):
+        return self._origin
+
+    @property
+    def distribution(self):
+        return self._distribution
+
+    @property
+    def parts(self):
+        return self._parts
+
+    @property
+    def architectures(self):
+        return self._architectures

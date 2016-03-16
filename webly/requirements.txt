@@ -3,3 +3,6 @@ flask
 gunicorn
 sqlalchemy
 psycopg2
+requests
+python-debian
+chardet
