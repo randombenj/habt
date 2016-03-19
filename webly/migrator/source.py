@@ -48,10 +48,11 @@ class SourceList():
 
         with open(sources_list_file) as sources_list:
             # read the sources.list file, remove comments and empty lines
-            self._raw_sources_list = filter(
-                lambda f: not f.startswith('#') and f.strip(),
-                [s.strip() for s in sources_list.readlines()]
-            )
+            self._raw_sources_list = [
+                s.strip() for s in sources_list.readlines()
+                if s.strip() and not s.startswith('#')
+            ]
+
 
     @property
     def entries(self):
