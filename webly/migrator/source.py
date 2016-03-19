@@ -75,13 +75,13 @@ class SourceListEntry():
         offset = 1 if has_defined_architectures else 0
 
         # load components of the sources list
-        self._origin = self._source_list[1 + offset]
+        self._archive = self._source_list[1 + offset]
         self._distribution = self._source_list[2 + offset]
         # one source list can have multiple components (main, non-free ...)
         self._parts = self._source_list[3 + offset:]
 
         response = requests.get(
-            '{0}/dists/{1}/Release'.format(self._origin, self._distribution)
+            '{0}/dists/{1}/Release'.format(self._archive, self._distribution)
         )
 
         if response.ok:
@@ -97,12 +97,12 @@ class SourceListEntry():
             ]
 
     @property
-    def origin(self):
+    def archive(self):
         '''
             returns:
              The origin of the package source
         '''
-        return self._origin
+        return self._archive
 
     @property
     def distribution(self):
