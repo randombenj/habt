@@ -2,3 +2,4 @@
 .env
 *.list
 __pycache__/
+webly.log

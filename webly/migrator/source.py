@@ -60,6 +60,9 @@ class SourceList():
 
 class SourceListEntry():
     def __init__(self, source):
+        '''
+            Initializes a source.list entry
+        '''
         self._source_list = source.split()
         self._architectures = []
         # the architectures don't have to be set
@@ -81,22 +84,48 @@ class SourceListEntry():
         )
 
         if response.ok:
-            self._release = next(Release.iter_paragraphs(response.text))
+            release = next(Release.iter_paragraphs(response.text))
+            # if no expicit arcitectures are defined, use all given in the release file
             if not self._architectures:
-                self._architectures = self._release['Architectures'].split()
+                self._architectures = release['Architectures'].split()
+
+            # get only the files from the requested parts
+            self._files = [
+                f for f in release['SHA256']
+                if any([p for p in self._parts if p in f['name']])
+            ]
 
     @property
     def origin(self):
+        '''
+            returns:
+             The origin of the package source
+        '''
         return self._origin
 
     @property
     def distribution(self):
+        '''
+            returns:
+             The distribution of the source list
+        '''
         return self._distribution
 
     @property
     def parts(self):
+        '''
+            returns:
+             The parts of the source list
+        '''
         return self._parts
 
     @property
     def architectures(self):
+        '''
+            retunrs:
+             The architectures of the sources list.
+
+             If not specified in the source.list file all architectures
+             in the release files are taken.
+        '''
         return self._architectures
