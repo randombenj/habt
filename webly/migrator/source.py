@@ -93,7 +93,21 @@ class SourceListEntry():
             # get only the files from the requested parts
             self._files = [
                 f for f in release['SHA256']
-                if any([p for p in self._parts if p in f['name']])
+                if (
+                    # use only the gzip compressed files
+                    '-udeb' not in f['name'] and
+                    '.gz' in f['name'] and
+                    any([
+                        # filter for the requested parts
+                        p for p in self._parts
+                        if p in f['name']]
+                    ) and
+                    any([
+                        # filter for the requested architectures ignoring the source packages
+                        a for a in self._architectures
+                        if a in f['name'] or 'Sources' in f['name']
+                    ])
+                )
             ]
 
     @property
