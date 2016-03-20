@@ -1,6 +1,8 @@
 click
-flask
 gunicorn
+flask
+flask_sqlalchemy
+flask_jsontools
 sqlalchemy
 psycopg2
 requests

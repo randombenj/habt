@@ -55,7 +55,8 @@ class Source():
                     )
 
                     if response.ok:
-                        content = gzip.decompress(response.content)
+                        content = gzip.decompress(response.content).decode("utf-8")
+                        log.info('Type: ' + str(type(content)))
                         architecture_entry.update({
                             f: self.__parser[f](content)
                         })
@@ -63,7 +64,7 @@ class Source():
                 source_list_entry['Architectures'].append(architecture_entry)
             packages.append(source_list_entry)
 
-        log.info(packages)
+        # log.info(packages)
         return packages
 
 

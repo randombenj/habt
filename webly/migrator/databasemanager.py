@@ -33,8 +33,14 @@ class DatabaseManager():
             to the Models
         '''
         log.info('Starting a database migration')
+        Session = sessionmaker(bind=self._connection)
 
-        Migrator()
+        # package = Package(name="Test Package")
+        # session = Session()
+        #
+        # session.add(package)
+        # session.commit()
+        Migrator(Session())
         # Session = sessionmaker(bind=self._connection)
         #
         # package = Package(name="Test Package")

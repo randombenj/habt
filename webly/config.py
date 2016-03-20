@@ -5,7 +5,6 @@ import logging.config
 class Config():
 
     def __init__(self):
-
         self._db_name = os.environ['DB_NAME']
         self._db_user =  os.environ['DB_USER']
         self._db_password =  os.environ['DB_PASS']
@@ -18,6 +17,7 @@ class Config():
             self._db_port,
             self._db_name
         )
+        self._debug = os.environ['DEBUG'] == 'True'
 
     @property
     def connection_string(self):
@@ -25,6 +25,14 @@ class Config():
             Returns the Sql Alchemy Postgres SQL connection URI
         '''
         return self._sqlalchemy_db_uri
+
+
+    @property
+    def debug(self):
+        '''
+            Returns wether the application is in debug mode
+        '''
+        return self._debug
 
     @staticmethod
     def setup_logger(level=logging.INFO):

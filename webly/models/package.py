@@ -1,7 +1,7 @@
 from sqlalchemy import Column
 from sqlalchemy import Integer, String
 
-from webly.models.base import Base
+from webly.models.database import Base
 
 class Package(Base):
     __tablename__ = 'package'
