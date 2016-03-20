@@ -1,7 +1,6 @@
 import gzip
 import requests
-from io import StringIO
-from deb822 import Packages, Release
+from deb822 import Packages, Release, Sources
 import logging
 
 log = logging.getLogger(__name__)
@@ -11,34 +10,61 @@ class Source():
         self._filename = filename
         self._source_list = SourceList(self._filename)
 
+    @property
+    def __parser(self):
+        return {
+            'Packages': Packages.iter_paragraphs,
+            'Sources': Sources.iter_paragraphs,
+            'Contents': lambda f: {}
+        }
 
     @property
     def packages(self):
+        packages = []
+
         for entry in self._source_list.entries:
-            log.info(entry.__dict__)
-        # # removing the '[arch=' and ']' fron the architecture list
-        # for architecture in entry_parts[1][6:-1].split(','):
-        #     # one source list can have multiple components (main, non-free ...)
-        #     for component in entry_parts[4:]:
-        #         response = requests.get('{0}/dists/{1}/{2}/binary-{3}/Packages.gz'.format(
-        #             entry_parts[2],
-        #             entry_parts[3],
-        #             component,
-        #             architecture
-        #         ))
-        #
-        #         if response.ok:
-        #             content = gzip.GzipFile(
-        #                 fileobj=StringIO(response.content)
-        #             ).read()
-        #
-        #             sources.append({
-        #                 'architecture': architecture,
-        #                 'component': component,
-        #                 'packages': Packages.iter_paragraphs(content)
-        #             })
-        #
-        # return sources
+            # get the sources file for requested entry
+            response = requests.get(
+                entry.build_uri(
+                    entry.sources_file['Sources']['name']
+                )
+            )
+
+            if response.ok:
+                content = gzip.decompress(response.content)
+
+            source_list_entry = {
+                'Entry': entry,
+                'Sources': self.__parser['Sources'](content),
+                'Architectures': []
+            }
+
+            for architecture in entry.architectures:
+                # get the binary and source files
+                files = entry.get_files(architecture)
+
+                architecture_entry = {
+                    'Architecture': architecture
+                }
+
+                for f in files:
+                    response = requests.get(
+                        entry.build_uri(
+                            files[f]['name']
+                        )
+                    )
+
+                    if response.ok:
+                        content = gzip.decompress(response.content)
+                        architecture_entry.update({
+                            f: self.__parser[f](content)
+                        })
+
+                source_list_entry['Architectures'].append(architecture_entry)
+            packages.append(source_list_entry)
+
+        log.info(packages)
+        return packages
 
 
 class SourceList():
@@ -94,8 +120,10 @@ class SourceListEntry():
             self._files = [
                 f for f in release['SHA256']
                 if (
-                    # use only the gzip compressed files
+                    # ignore udeb and debian-installer files
                     '-udeb' not in f['name'] and
+                    'debian-installer' not in f['name'] and
+                    # use only the gzip compressed files
                     '.gz' in f['name'] and
                     any([
                         # filter for the requested parts
@@ -137,10 +165,69 @@ class SourceListEntry():
     @property
     def architectures(self):
         '''
-            retunrs:
+            returns:
              The architectures of the sources list.
 
              If not specified in the source.list file all architectures
              in the release files are taken.
         '''
         return self._architectures
+
+    def build_uri(self, requested_file):
+        '''
+            Builds the destination archive url to download the given file.
+            This is done with the standard package repository format:
+            $archive/dists/$distribution/$file
+
+            returns:
+             A built uri ready to download the given file
+        '''
+        return '{0}/dists/{1}/{2}'.format(
+            self._archive,
+            self._distribution,
+            requested_file
+        )
+
+    @property
+    def sources_file(self):
+        '''
+            returns:
+             Sources file if any could be found
+        '''
+        return {'Sources': [
+            f for f in self._files
+            if 'Sources' in f['name']
+        ][0]}
+
+    def get_files(self, architecture):
+        '''
+            architecture:
+             The given architecture e.g 'amd64' or 'armhf'
+
+            returns:
+             The listed files in the Release file matching the given
+             Architecture
+        '''
+        if not architecture in self._architectures:
+            return []
+
+        # filter the files for a matching architecture
+        architecture_files = [
+            f for f in self._files
+            if architecture in f['name']
+        ]
+
+        def file_filter(name):
+            '''
+                Filters files if they contain
+                a given name.
+            '''
+            return [
+                f for f in architecture_files
+                if name in f['name']
+            ]
+
+        return {
+            'Packages': file_filter('Packages')[0],
+            'Contents': file_filter('Contents')[0]
+        }
