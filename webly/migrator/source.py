@@ -56,7 +56,6 @@ class Source():
 
                     if response.ok:
                         content = gzip.decompress(response.content).decode("utf-8")
-                        log.info('Type: ' + str(type(content)))
                         architecture_entry.update({
                             f: self.__parser[f](content)
                         })

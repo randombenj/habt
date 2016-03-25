@@ -2,12 +2,12 @@
 
 import click
 import logging
-from webly.migrator.databasemanager import DatabaseManager
+from webly.migrator.databasemanager import migrate
 from webly.config import Config
 
 @click.command()
 def init():
-    DatabaseManager().migrate()
+    migrate()
 
 if __name__ == '__main__':
     # Setup the logger configuration

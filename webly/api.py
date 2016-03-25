@@ -19,8 +19,7 @@ db = SQLAlchemy(app)
 @app.route("/")
 def hello():
     packages = [{'name': p.name} for p in Package.query.all()]
-    log.info(packages)
-    return jsonify({'asdf': packages})
+    return jsonify({'packages': packages})
 
 if __name__ == "__main__":
     app.run('0.0.0.0', debug=True)
