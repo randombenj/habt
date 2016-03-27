@@ -21,6 +21,7 @@ class PackageMigrator():
             Migrates the packages
         '''
         for source in self._packages:
+            sources_list = list(source['Sources'])
             for architecture in source['Architectures']:
                 # log.info(architecture)
                 for key, packages in groupby(
@@ -31,13 +32,20 @@ class PackageMigrator():
                     package_versions = []
 
                     for version in packages:
+                        # Get the source package for source code information
+                        source_package = next(
+                            s for s in sources_list
+                            if package.name in s['Binary']
+                        )
+
                         package_versions.append(
                             PackageVersion.get_or_create(
                                 version=version['Version'],
                                 description=version['Description'],
                                 maintainer=version['Maintainer'],
-                                filename=version['Filename']
-                                #package=package
+                                filename=version['Filename'],
+                                homepage=version.get('Homepage', default=''),
+                                vcs_browser=source_package.get('Vcs-Browser', default='')
                             )
                         )
 

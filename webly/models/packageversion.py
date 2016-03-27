@@ -11,5 +11,7 @@ class PackageVersion(GetOrCreateMixin, Base):
     description = Column(String)
     maintainer = Column(String)
     filename = Column(String)
+    homepage = Column(String)
+    vcs_browser = Column(String)
     package_id = Column(Integer, ForeignKey('package.id'))
     package = relationship("Package", back_populates="versions")

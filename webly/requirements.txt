@@ -1,7 +1,6 @@
 click
 gunicorn
 flask
-flask_sqlalchemy
 flask_jsontools
 sqlalchemy
 psycopg2
