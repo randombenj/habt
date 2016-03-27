@@ -22,6 +22,7 @@ class PackageMigrator():
         '''
         for source in self._packages:
             sources_list = list(source['Sources'])
+            description_list = list(source['Descriptions'])
             for architecture in source['Architectures']:
                 # log.info(architecture)
                 for key, packages in groupby(
@@ -37,11 +38,17 @@ class PackageMigrator():
                             s for s in sources_list
                             if package.name in s['Binary']
                         )
+                        # Get the package description
+                        description = next(
+                            d for d in description_list
+                            if package.name in d['Package']
+                        )
 
                         package_versions.append(
                             PackageVersion.get_or_create(
                                 version=version['Version'],
-                                description=version['Description'],
+                                title=version['Description'],
+                                description=description['Description-en'],
                                 maintainer=version['Maintainer'],
                                 filename=version['Filename'],
                                 homepage=version.get('Homepage', default=''),

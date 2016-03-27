@@ -8,6 +8,7 @@ class PackageVersion(GetOrCreateMixin, Base):
     __tablename__ = 'package_version'
     id = Column(Integer, primary_key=True)
     version = Column(String)
+    title = Column(String)
     description = Column(String)
     maintainer = Column(String)
     filename = Column(String)
