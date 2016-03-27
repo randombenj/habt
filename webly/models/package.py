@@ -2,9 +2,9 @@ from sqlalchemy import Column
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import relationship
 
-from webly.models.database import Base
+from webly.database import Base, GetOrCreateMixin
 
-class Package(Base):
+class Package(GetOrCreateMixin, Base):
     __tablename__ = 'package'
     id = Column(Integer, primary_key=True)
     name = Column(String)

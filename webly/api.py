@@ -1,5 +1,8 @@
 from flask import Flask, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask.ext.jsontools import jsonapi, DynamicJSONEncoder
+from sqlalchemy.orm import joinedload
+
+from webly.database import session
 
 from webly.models import Package
 from webly.config import Config
@@ -12,14 +15,21 @@ log = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.debug = config.debug
-app.config['SQLALCHEMY_DATABASE_URI'] = config.connection_string
-db = SQLAlchemy(app)
+# uses the <obj>.__json__() method to encode json
+app.json_encoder = DynamicJSONEncoder
 
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    session.remove()
 
 @app.route("/")
+@jsonapi
 def hello():
-    packages = [{'name': p.name} for p in Package.query.all()]
-    return jsonify({'packages': packages})
+    packages = (Package.query
+        .options(joinedload('versions'))
+        .all())
+
+    return {'packages': packages}
 
 if __name__ == "__main__":
-    app.run('0.0.0.0', debug=True)
+    app.run('0.0.0.0', port=8000)

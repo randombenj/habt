@@ -2,9 +2,9 @@ from sqlalchemy import Column
 from sqlalchemy import Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
-from webly.models.database import Base
+from webly.database import Base, GetOrCreateMixin
 
-class PackageVersion(Base):
+class PackageVersion(GetOrCreateMixin, Base):
     __tablename__ = 'package_version'
     id = Column(Integer, primary_key=True)
     version = Column(String)
