@@ -31,7 +31,7 @@ class Source():
             )
 
             if response.ok:
-                content = gzip.decompress(response.content)
+                content = gzip.decompress(response.content).decode("utf-8")
 
             source_list_entry = {
                 'Entry': entry,
