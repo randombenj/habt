@@ -1,5 +1,9 @@
 from itertools import groupby
-from webly.models import Package, PackageVersion, PackageSection
+from webly.models import (Package,
+    PackageVersion,
+    PackageSection,
+    DependencySection,
+    Dependency)
 from webly.migrator.helper import timeit
 from webly.database import session
 
@@ -73,7 +77,7 @@ class PackageMigrator():
             log.debug('Removing description: {0}'.format(description))
             description_list.remove(description)
 
-        package.versions.append(PackageVersion(
+        package_version = PackageVersion(
             version=version['Version'],
             title=version['Description'],
             description=description.get('Description-en', ''),
@@ -82,4 +86,32 @@ class PackageMigrator():
             homepage=version.get('Homepage', ''),
             vcs_browser=source_package.get('Vcs-Browser', ''),
             section=PackageSection.get_or_create(name=version['Section'])
-        ))
+        )
+        self._package_dependencies(version, package_version)
+        package.versions.append(package_version)
+
+    def _package_dependencies(self, version, package_version):
+        for section in version.relations:
+            dependency_section = (DependencySection
+                .query
+                .filter(
+                    DependencySection.name == section
+                ).first())
+
+            for relation in version.relations[section]:
+                # TODO: define what to do with the OR relation
+                relation = relation[0]
+                session.add(Dependency(
+                    # add the dependency version (if any)
+                    version='({0} {1})'.format(
+                        relation['version'][0],
+                        relation['version'][1]
+                    ) if relation['version'] else '',
+                    package=Package.get_or_create(
+                        # even though it's forbidden in the policy,
+                        # there are some capital case names ...
+                        name=relation['name'].lower()
+                    ),
+                    dependency_section=dependency_section,
+                    package_version=package_version
+                ))

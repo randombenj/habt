@@ -14,14 +14,14 @@ class DependencySectionMigrator():
             Migrates the dependency sections
         '''
         sections = [
-            'depends'
+            'depends',
             'pre-depends',
             'recommends',
             'suggests',
             'breaks',
             'conflicts',
             'provides',
-            'replaces'
+            'replaces',
             'enhances'
         ]
         for section in sections:
