@@ -32,6 +32,7 @@ class PackageMigrator():
             description_list = list(source['Descriptions'])
 
             for architecture in source['Architectures']:
+
                 for key, packages in groupby(
                     architecture['Packages'],
                     lambda p: p['Package']
@@ -45,11 +46,11 @@ class PackageMigrator():
                             description_list
                         )
 
-                    if package.id:
+                    # commiting once per package, no self refferences assumed
+                    if not package.id:
                         session.add(package)
+                    session.commit()
 
-                log.info('Commiting changes to the DB!')
-                session.commit()
                 log.info('Added {0} debian Packages to the database'.format(
                     Package.query.count()
                 ))
@@ -77,6 +78,11 @@ class PackageMigrator():
             log.debug('Removing description: {0}'.format(description))
             description_list.remove(description)
 
+        package_section = PackageSection.get_or_create(name=version['Section'])
+        if not package_section.id:
+            # add the section if it is new
+            session.add(package_section)
+
         package_version = PackageVersion(
             version=version['Version'],
             title=version['Description'],
@@ -85,7 +91,7 @@ class PackageMigrator():
             filename=version['Filename'],
             homepage=version.get('Homepage', ''),
             vcs_browser=source_package.get('Vcs-Browser', ''),
-            section=PackageSection.get_or_create(name=version['Section'])
+            section=package_section
         )
         self._package_dependencies(version, package_version)
         package.versions.append(package_version)
@@ -101,17 +107,22 @@ class PackageMigrator():
             for relation in version.relations[section]:
                 # TODO: define what to do with the OR relation
                 relation = relation[0]
+                package = Package.get_or_create(
+                    # even though it's forbidden in the policy,
+                    # there are some capital case names ...
+                    name=relation['name'].lower()
+                )
+                if not package.id:
+                    # add the package if it is new
+                    session.add(package)
+
                 session.add(Dependency(
                     # add the dependency version (if any)
                     version='({0} {1})'.format(
                         relation['version'][0],
                         relation['version'][1]
                     ) if relation['version'] else '',
-                    package=Package.get_or_create(
-                        # even though it's forbidden in the policy,
-                        # there are some capital case names ...
-                        name=relation['name'].lower()
-                    ),
+                    package=package,
                     dependency_section=dependency_section,
                     package_version=package_version
                 ))

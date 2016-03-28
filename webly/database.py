@@ -8,12 +8,10 @@ from flask.ext.jsontools import JsonSerializableBase
 from webly.config import Config
 config = Config()
 
-import types
-
 engine = create_engine(
     config.connection_string,
     convert_unicode=True,
-    echo=config.debug
+    echo=False
 )
 
 session = scoped_session(
@@ -26,7 +24,7 @@ session = scoped_session(
 
 class GetOrCreateMixin():
     '''
-        Mixin to add the get_or_create method to required models
+        Mixin to add the get_or_create and get_or_add methods to required models
     '''
     @classmethod
     def get_or_create(cls, **kwargs):
@@ -41,13 +39,29 @@ class GetOrCreateMixin():
              A new or found instance
         '''
         instance = session.query(cls).filter_by(**kwargs).first()
-        if instance:
-            return instance
-        else:
-            instance = cls(**kwargs)
+        return instance if instance else cls(**kwargs)
+
+
+    @classmethod
+    def get_or_add(cls, **kwargs):
+        '''
+            Creates a new instance of an object if it does not exist
+            in addition to get_or_create the get_or_add method also
+            adds the instance to the database if it does not exist.
+            If the instance is new is determined wether the id attribute is
+            greater than 0
+
+            kwargs:
+             The tables attributes
+
+            returns:
+             A new or added instance
+        '''
+        instance = cls.get_or_add(**kwargs)
+        if not instance.id:
             session.add(instance)
             session.commit()
-            return instance
+        return instance
 
 
 Base = declarative_base(cls=(JsonSerializableBase))
