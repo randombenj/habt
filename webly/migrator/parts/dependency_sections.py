@@ -15,8 +15,13 @@ class DependencySectionMigrator():
         '''
         sections = [
             'depends'
-            'recommends'
-            'suggests'
+            'pre-depends',
+            'recommends',
+            'suggests',
+            'breaks',
+            'conflicts',
+            'provides',
+            'replaces'
             'enhances'
         ]
         for section in sections:
