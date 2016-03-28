@@ -16,3 +16,5 @@ class PackageVersion(GetOrCreateMixin, Base):
     vcs_browser = Column(String)
     package_id = Column(Integer, ForeignKey('package.id'))
     package = relationship("Package", back_populates="versions")
+    section_id = Column(Integer, ForeignKey('package_section.id'))
+    section = relationship("PackageSection", back_populates="package_versions")

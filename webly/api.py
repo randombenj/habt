@@ -26,7 +26,10 @@ def shutdown_session(exception=None):
 @jsonapi
 def hello():
     packages = (Package.query
-        .options(joinedload('versions'))
+        .options(
+            joinedload('versions')
+                .joinedload('section')
+        )
         .all())
 
     return {'packages': packages}

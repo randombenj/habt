@@ -1,5 +1,5 @@
 from itertools import groupby
-from webly.models import Package, PackageVersion
+from webly.models import Package, PackageVersion, PackageSection
 from webly.database import session
 
 import logging
@@ -24,14 +24,11 @@ class PackageMigrator():
             sources_list = list(source['Sources'])
             description_list = list(source['Descriptions'])
             for architecture in source['Architectures']:
-                # log.info(architecture)
                 for key, packages in groupby(
                     architecture['Packages'],
                     lambda p: p['Package']
                 ):
                     package = Package.get_or_create(name=key)
-                    package_versions = []
-
                     for version in packages:
                         # Get the source package for source code information
                         source_package = next(
@@ -44,7 +41,7 @@ class PackageMigrator():
                             if package.name in d['Package']
                         )
 
-                        package_versions.append(
+                        package.versions.append(
                             PackageVersion.get_or_create(
                                 version=version['Version'],
                                 title=version['Description'],
@@ -52,11 +49,11 @@ class PackageMigrator():
                                 maintainer=version['Maintainer'],
                                 filename=version['Filename'],
                                 homepage=version.get('Homepage', default=''),
-                                vcs_browser=source_package.get('Vcs-Browser', default='')
+                                vcs_browser=source_package.get('Vcs-Browser', default=''),
+                                section=PackageSection.get_or_create(name=version['Section'])
                             )
                         )
 
-                    package.versions = package_versions
                     if package.id:
                         session.add(package)
 
