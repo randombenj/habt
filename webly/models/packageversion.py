@@ -18,3 +18,4 @@ class PackageVersion(GetOrCreateMixin, Base):
     package = relationship("Package", back_populates="versions")
     section_id = Column(Integer, ForeignKey('package_section.id'))
     section = relationship("PackageSection", back_populates="package_versions")
+    dependencies = relationship("Dependency", back_populates="package_version")

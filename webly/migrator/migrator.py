@@ -2,7 +2,7 @@ import os
 import logging
 from webly.migrator.source import Source
 
-from webly.migrator.parts import PackageMigrator
+from webly.migrator.parts import PackageMigrator, DependencySectionMigrator
 
 log = logging.getLogger(__name__)
 
@@ -14,4 +14,5 @@ class Migrator():
         '''
             Runs all the migrators
         '''
+        DependencySectionMigrator().run()
         PackageMigrator(self._packages).run()

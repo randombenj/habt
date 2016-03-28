@@ -203,10 +203,10 @@ class SourceListEntry():
             returns:
              Sources file if any could be found
         '''
-        return {'Sources': [
+        return {'Sources': next(
             f for f in self._files
             if 'Sources' in f['name']
-        ][0]}
+        )}
 
     @property
     def descriptions_file(self):
@@ -214,10 +214,10 @@ class SourceListEntry():
             returns:
              Sources file if any could be found
         '''
-        return {'Descriptions': [
+        return {'Descriptions': next(
             f for f in self._files
             if 'Translation-en' in f['name']
-        ][0]}
+        )}
 
     def get_files(self, architecture):
         '''
@@ -242,12 +242,17 @@ class SourceListEntry():
                 Filters files if they contain
                 a given name.
             '''
-            return [
+            files = [
                 f for f in architecture_files
                 if name in f['name']
             ]
 
+            if len(files):
+                return files[0]
+            else:
+                return {'name': ''}
+
         return {
-            'Packages': file_filter('Packages')[0],
-            'Contents': file_filter('Contents')[0]
+            'Packages': file_filter('Packages'),
+            'Contents': file_filter('Contents')
         }
