@@ -56,6 +56,17 @@ class PackageMigrator():
                 ))
 
     def _package_version(self, package, version, source_packages, description_list):
+
+        if package.id:
+            db_version = (PackageVersion.query
+                .filter(
+                    PackageVersion.package_id == package.id,
+                    PackageVersion.version == version['Version']
+                ).first())
+            if db_version:
+                log.info('Version allready exists {0}'.format(version))
+                return
+
         # Get the source package for source code information
         source_package = next(
             (s for s in source_packages
@@ -73,10 +84,22 @@ class PackageMigrator():
             if package.name in d['Package']),
             {} # default value
         )
+
+        # assign default value
+        title_text = version['Description']
+        description_text = description.get('Description-en', '')
+
         # remove the old entry for performance reason
         if description:
             log.debug('Removing description: {0}'.format(description))
             description_list.remove(description)
+        else:
+            # if no description is given from the translations file, check if
+            # the package description is multiline
+            description_lines = version['Description'].splitlines()
+            if len(description_lines) > 1:
+                title_text = description_lines[0].strip()
+                description_text = '\n'.join(description_lines[1:]).strip()
 
         package_section = PackageSection.get_or_create(name=version['Section'])
         if not package_section.id:
@@ -85,8 +108,8 @@ class PackageMigrator():
 
         package_version = PackageVersion(
             version=version['Version'],
-            title=version['Description'],
-            description=description.get('Description-en', ''),
+            title=title_text,
+            description=description_text,
             maintainer=version['Maintainer'],
             filename=version['Filename'],
             homepage=version.get('Homepage', ''),

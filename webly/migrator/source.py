@@ -147,6 +147,8 @@ class SourceListEntry():
                     ])
                 )
             ]
+        else:
+            self._files = []
         log.info('Got Release files: {0}'.format(self._files))
 
     @property

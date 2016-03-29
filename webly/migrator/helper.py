@@ -28,6 +28,7 @@ class Contents():
 
     @staticmethod
     def get_contents(content):
+        # TODO: reimplement this, eats half of the ram ^^
         contents = []
         if not content:
             return contents
