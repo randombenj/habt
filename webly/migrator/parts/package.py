@@ -4,6 +4,11 @@ from webly.models import (Package,
     PackageSection,
     DependencySection,
     Dependency)
+from webly.models import (InstallTarget,
+    Architecture,
+    Archive,
+    Distribution,
+    Part)
 from webly.migrator.helper import timeit
 from webly.database import session
 
@@ -32,6 +37,23 @@ class PackageMigrator():
             description_list = list(source['Descriptions'])
 
             for architecture in source['Architectures']:
+                source_list_entry = source['Entry']
+                installtarget = (InstallTarget.query
+                    .join(Archive)
+                    .join(Distribution)
+                    .join(Part)
+                    .join(Architecture)
+                    .filter(
+                        (Archive.url == source_list_entry.archive) &
+                        (Distribution.name == source_list_entry.distribution) &
+                        (Part.name == source_list_entry.parts[0]) & # TODO: loop through parts in source.py
+                        (Architecture.name == architecture['Architecture'])
+                ).one())
+
+                if installtarget:
+                    log.info('Installtarget: {0}'.format(installtarget))
+                else:
+                    log.warn('No Installtarget found!')
 
                 for key, packages in groupby(
                     architecture['Packages'],
@@ -43,7 +65,8 @@ class PackageMigrator():
                             package,
                             version,
                             sources_list,
-                            description_list
+                            description_list,
+                            installtarget
                         )
 
                     # commiting once per package, no self refferences assumed
@@ -55,7 +78,7 @@ class PackageMigrator():
                     Package.query.count()
                 ))
 
-    def _package_version(self, package, version, source_packages, description_list):
+    def _package_version(self, package, version, source_packages, description_list, installtarget):
 
         if package.id:
             db_version = (PackageVersion.query
@@ -64,7 +87,11 @@ class PackageMigrator():
                     PackageVersion.version == version['Version']
                 ).first())
             if db_version:
-                log.info('Version allready exists {0}'.format(version))
+                db_version.installtargets.append(installtarget)
+                log.info('Version allready exists {0} ({1})'.format(
+                    version['Package'],
+                    version['Version']
+                ))
                 return
 
         # Get the source package for source code information
@@ -116,6 +143,7 @@ class PackageMigrator():
             vcs_browser=source_package.get('Vcs-Browser', ''),
             section=package_section
         )
+        package_version.installtargets.append(installtarget)
         self._package_dependencies(version, package_version)
         package.versions.append(package_version)
 
