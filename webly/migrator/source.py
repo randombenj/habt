@@ -37,18 +37,20 @@ class Source():
 
         for entry in self._source_list.entries:
             # get the sources file for requested entry
+            sources_content = self.__get_and_decode(entry.build_uri(
+                entry.sources_file['Sources']['name']
+            ))
+            descriptions_content = self.__get_and_decode(entry.build_uri(
+                entry.descriptions_file['Descriptions']['name']
+            ))
             source_list_entry = {
                 'Entry': entry,
                 'Sources': self.__parser['Sources'](
-                    self.__get_and_decode(entry.build_uri(
-                        entry.sources_file['Sources']['name']
-                    ))
-                ),
+                    sources_content
+                ) if sources_content else [],
                 'Descriptions': self.__parser['Descriptions'](
-                    self.__get_and_decode(entry.build_uri(
-                        entry.descriptions_file['Descriptions']['name']
-                    ))
-                ),
+                    descriptions_content
+                ) if descriptions_content else [],
                 'Architectures': []
             }
 
@@ -215,8 +217,9 @@ class SourceListEntry():
              Sources file if any could be found
         '''
         return {'Descriptions': next(
-            f for f in self._files
-            if 'Translation-en' in f['name']
+            (f for f in self._files
+            if 'Translation-en' in f['name']),
+            {'name': ''} # default value
         )}
 
     def get_files(self, architecture):
