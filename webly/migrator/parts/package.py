@@ -50,6 +50,19 @@ class PackageMigrator():
                         (Architecture.name == architecture['Architecture'])
                 ).one())
 
+                # Load the 'all' installtarget separatly
+                installtarget_all = (InstallTarget.query
+                    .join(Archive)
+                    .join(Distribution)
+                    .join(Part)
+                    .join(Architecture)
+                    .filter(
+                        (Archive.url == source_list_entry.archive) &
+                        (Distribution.name == source_list_entry.distribution) &
+                        (Part.name == source_list_entry.parts[0]) & # TODO: loop through parts in source.py
+                        (Architecture.name == 'all')
+                ).one())
+
                 if installtarget:
                     log.info('Installtarget: {0}'.format(installtarget))
                 else:
@@ -61,6 +74,9 @@ class PackageMigrator():
                 ):
                     package = Package.get_or_create(name=key)
                     for version in packages:
+                        version_installtarget = installtarget
+                        if version['Architecture'] == 'all':
+                            version_installtarget = installtarget_all
                         self._package_version(
                             package,
                             version,
@@ -79,7 +95,6 @@ class PackageMigrator():
                 ))
 
     def _package_version(self, package, version, source_packages, description_list, installtarget):
-
         if package.id:
             db_version = (PackageVersion.query
                 .filter(

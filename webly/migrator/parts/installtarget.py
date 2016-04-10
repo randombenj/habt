@@ -40,4 +40,15 @@ class InstallTargetMigrator():
                             name=architecture['Architecture']
                         )
                     ))
-                    session.commit()
+                    #session.commit()
+
+                session.add(InstallTarget(
+                    archive=archive,
+                    distribution=distribution,
+                    part=db_part,
+                    architecture=Architecture.get_or_create(
+                        name='all'
+                    )
+                ))
+
+                session.commit()
