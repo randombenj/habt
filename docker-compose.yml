@@ -12,11 +12,11 @@ web:
 
 nginx:
   restart: "always"
-  build: ./nginx/
+  build: ./app
   ports:
     - "80:80"
   volumes:
-    - ./app:/www/webly
+    - ./app/webly:/www/webly
   links:
     - web:web
 
