@@ -1,6 +1,8 @@
+import bz2
 import gzip
 import requests
 from deb822 import Packages, Release, Sources
+from webly.migrator.helper import Descriptions, Contents
 import logging
 
 log = logging.getLogger(__name__)
@@ -15,8 +17,19 @@ class Source():
         return {
             'Packages': Packages.iter_paragraphs,
             'Sources': Sources.iter_paragraphs,
-            'Contents': lambda f: {}
+            'Descriptions': Descriptions.iter_paragraphs,
+            'Contents': Contents.get_contents
         }
+
+    def __get_and_decode(self, file_url):
+        response = requests.get(file_url)
+        if response.ok:
+            if 'gz' in file_url:
+                return gzip.decompress(response.content).decode("utf-8")
+            if 'bz2' in file_url:
+                return bz2.decompress(response.content).decode("utf-8")
+        else:
+            return ''
 
     @property
     def packages(self):
@@ -24,18 +37,20 @@ class Source():
 
         for entry in self._source_list.entries:
             # get the sources file for requested entry
-            response = requests.get(
-                entry.build_uri(
-                    entry.sources_file['Sources']['name']
-                )
-            )
-
-            if response.ok:
-                content = gzip.decompress(response.content)
-
+            sources_content = self.__get_and_decode(entry.build_uri(
+                entry.sources_file['Sources']['name']
+            ))
+            descriptions_content = self.__get_and_decode(entry.build_uri(
+                entry.descriptions_file['Descriptions']['name']
+            ))
             source_list_entry = {
                 'Entry': entry,
-                'Sources': self.__parser['Sources'](content),
+                'Sources': self.__parser['Sources'](
+                    sources_content
+                ) if sources_content else [],
+                'Descriptions': self.__parser['Descriptions'](
+                    descriptions_content
+                ) if descriptions_content else [],
                 'Architectures': []
             }
 
@@ -48,22 +63,17 @@ class Source():
                 }
 
                 for f in files:
-                    response = requests.get(
-                        entry.build_uri(
-                            files[f]['name']
+                    architecture_entry.update({
+                        f: self.__parser[f](
+                            self.__get_and_decode(entry.build_uri(
+                                files[f]['name']
+                            ))
                         )
-                    )
-
-                    if response.ok:
-                        content = gzip.decompress(response.content).decode("utf-8")
-                        architecture_entry.update({
-                            f: self.__parser[f](content)
-                        })
+                    })
 
                 source_list_entry['Architectures'].append(architecture_entry)
             packages.append(source_list_entry)
 
-        # log.info(packages)
         return packages
 
 
@@ -124,7 +134,7 @@ class SourceListEntry():
                     '-udeb' not in f['name'] and
                     'debian-installer' not in f['name'] and
                     # use only the gzip compressed files
-                    '.gz' in f['name'] and
+                    ('.gz' in f['name'] or 'Translation-en.bz2' in f['name'])and
                     any([
                         # filter for the requested parts
                         p for p in self._parts
@@ -133,10 +143,13 @@ class SourceListEntry():
                     any([
                         # filter for the requested architectures ignoring the source packages
                         a for a in self._architectures
-                        if a in f['name'] or 'Sources' in f['name']
+                        if a in f['name'] or 'Sources' in f['name'] or 'Translation-en' in f['name']
                     ])
                 )
             ]
+        else:
+            self._files = []
+        log.info('Got Release files: {0}'.format(self._files))
 
     @property
     def archive(self):
@@ -194,10 +207,22 @@ class SourceListEntry():
             returns:
              Sources file if any could be found
         '''
-        return {'Sources': [
+        return {'Sources': next(
             f for f in self._files
             if 'Sources' in f['name']
-        ][0]}
+        )}
+
+    @property
+    def descriptions_file(self):
+        '''
+            returns:
+             Sources file if any could be found
+        '''
+        return {'Descriptions': next(
+            (f for f in self._files
+            if 'Translation-en' in f['name']),
+            {'name': ''} # default value
+        )}
 
     def get_files(self, architecture):
         '''
@@ -222,12 +247,17 @@ class SourceListEntry():
                 Filters files if they contain
                 a given name.
             '''
-            return [
+            files = [
                 f for f in architecture_files
                 if name in f['name']
             ]
 
+            if len(files):
+                return files[0]
+            else:
+                return {'name': ''}
+
         return {
-            'Packages': file_filter('Packages')[0],
-            'Contents': file_filter('Contents')[0]
+            'Packages': file_filter('Packages'),
+            'Contents': file_filter('Contents')
         }

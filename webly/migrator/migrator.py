@@ -1,22 +1,19 @@
 import os
 import logging
-from webly.models import Package
 from webly.migrator.source import Source
+
+from webly.migrator.parts import PackageMigrator, DependencySectionMigrator, InstallTargetMigrator
 
 log = logging.getLogger(__name__)
 
 class Migrator():
-    def __init__(self, session):
-        for source in Source(os.path.join(os.path.dirname(__file__), 'sources.list')).packages:
-            for architecture in source['Architectures']:
-                # log.info(architecture)
-                for package in architecture['Packages']:
-                    log.info('Adding Packet:\n\n')
-                    log.info(package['Package'])
+    def __init__(self):
+        self._packages = Source(os.path.join(os.path.dirname(__file__), 'sources.list')).packages
 
-                    package = Package(name=package['Package'])
-
-                    session.add(package)
-
-                log.info('Commiting changes to the DB!')
-                session.commit()
+    def run(self):
+        '''
+            Runs all the migrators
+        '''
+        DependencySectionMigrator().run()
+        InstallTargetMigrator().run(self._packages)
+        PackageMigrator(self._packages).run()
