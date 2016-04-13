@@ -1,0 +1,26 @@
+{
+  "name": "webly",
+  "authors": [
+    "Benj Fassbind <randombenj@gmail.com>"
+  ],
+  "description": "Webly Web Frontend",
+  "main": "app.module.js",
+  "keywords": [
+    "Debian",
+    "Visualization",
+    "Web"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.3",
+    "bootstrap": "^3.3.6",
+    "angular-route": "^1.5.3"
+  }
+}
