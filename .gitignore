@@ -3,4 +3,4 @@
 *.list
 __pycache__/
 webly.log
-app/webly/assets/lib/*
+web/assets/lib/*

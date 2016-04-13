@@ -7,10 +7,13 @@ RUN npm install -g bower
 # allow bower to run as root
 RUN echo '{ "allow_root": true }' > /root/.bowerrc
 
-COPY webly/ /www/webly
+# add the webapp
+COPY web/ /www/webly
 WORKDIR /www/webly
 
+# manage javascript dependencies
 RUN bower install
 
+# configure the nginx webserver
 RUN rm /etc/nginx/sites-enabled/default
-COPY sites-enabled/webly /etc/nginx/sites-enabled
+COPY nginx/sites-enabled/webly /etc/nginx/sites-enabled
