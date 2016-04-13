@@ -18,6 +18,9 @@ class PackageManager():
         '''
         results = (Package.query
             .filter(
-                Package.name.like("%{0}%".format(query))
+                # filter for the name
+                Package.name.like("%{0}%".format(query)) |
+                # also allow regular expressions
+                Package.name.op('~')(query)
             ).all())
         return { 'results': results }
