@@ -1,3 +1,42 @@
 /* -----------------------------------------------------------------------------
    MAIN STYLE FILE
+   -----------------------------------------------------------------------------
+
+   - $SEARCH
+
    ---------------------------------------------------------------------------*/
+
+
+/* -----------------------------------------------------------------------------
+  $SEARCH
+  ---------------------------------------------------------------------------*/
+.search {
+  top: 20px;
+  position: fixed;
+
+  /* used to center fixed search bar */
+  left: 50%;
+}
+
+/* Center the fixed search bar */
+
+/* Small Devices, Small Screens */
+@media (min-width: 768px) {
+  .search {
+    margin-left: -375px;
+  }
+}
+
+/* Small Devices, Small Screens */
+@media (min-width: 992px) {
+  .search {
+    margin-left: -485px;
+  }
+}
+
+/* Large Devices, Wide Screens */
+@media (min-width : 1200px) {
+  .search {
+    margin-left: -600px;
+  }
+}

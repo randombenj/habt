@@ -1,15 +1,44 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head ng-app="webly">
 
     <title>{ webly }</title>
+
+    <!-- load css frameworks -->
     <link rel="stylesheet" href="/assets/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="/assets/lib/font-awesome/css/font-awesome.css" />
+
+    <!-- load custom stylesheet last, to overwrite bootstrap if nescessary -->
+    <link rel="stylesheet" href="/assets/css/style.css" />
 
   </head>
   <body>
 
-    Hello World
+    <!-- search input -->
+    <div class="container search">
+
+      <div class="input-group">
+
+        <div class="input-group-addon">
+          <i class="fa fa-archive"></i>
+        </div>
+
+        <input type="text" class="form-control" id="package-search" placeholder="Packages">
+
+        <span class="input-group-btn">
+          <button class="btn btn-secondary" type="button">
+            <i class="fa fa-search"></i> Search
+          </button>
+        </span>
+
+      </div>
+
+    </div>
+
+    <!-- main view -->
+    <div ng-view></div>
+
 
     <!-- load the js framework libraries -->
     <script src="/assets/lib/jquery/dist/jquery.js"></script>
