@@ -22,5 +22,12 @@ class PackageManager():
                 Package.name.like("%{0}%".format(query)) |
                 # also allow regular expressions
                 Package.name.op('~')(query)
-            ).all())
+            )
+            # load all available versions
+            .options(
+                joinedload('versions')
+                    .load_only('version')
+            )
+            .all()
+        )
         return { 'results': results }
