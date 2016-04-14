@@ -1,6 +1,8 @@
 click
 gunicorn
 flask
+flask-swagger
+flask-cors
 flask_jsontools
 sqlalchemy
 psycopg2
