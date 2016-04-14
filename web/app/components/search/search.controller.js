@@ -1,0 +1,67 @@
+(function () {
+  'use strict';
+
+  angular
+    .module('webly')
+    .controller( 'SearchController', SearchController );
+
+  /**
+   * The search controller
+   *
+   * @param {Object} $scope
+   *  The injected DOM scope
+   *
+   * @param {[type]} $http
+   *  Module to make async HTTP Requests
+   */
+  function SearchController ( $scope, $http ) {
+
+    /**
+     * Gets called when the search input changes
+     */
+    $scope.change = function () {
+
+      if ( $scope.searchQuery === '' ) {
+
+          // don't perform an empty search
+          $scope.results = [];
+
+      } else {
+
+        // make a search api request
+        $http({
+          method: 'GET',
+          url: '/api/search/' + $scope.searchQuery
+        })
+        .then(
+
+          /**
+           * Successful api call
+           * @param  {Object} data
+           *  api response from the server
+           */
+          function success( data ) {
+
+            // log the data in the console
+            console.log( data );
+
+            // display the search results
+            $scope.results = data.data.results;
+          },
+
+          /**
+           * An error has occured while performing the api call
+           * @param  {Object} error
+           *  Error details
+           */
+          function error( error ) {
+
+            // log the error in the console
+            console.error( error );
+          }
+        );
+      }
+    };
+  }
+
+})();

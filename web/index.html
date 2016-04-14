@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-<html lang="en">
-  <head ng-app="webly">
+<html lang="en" ng-app="webly">
+  <head>
 
     <title>{ webly }</title>
 
@@ -16,7 +16,7 @@
   <body>
 
     <!-- search input -->
-    <div class="container search">
+    <div class="container search" ng-controller="SearchController">
 
       <div class="input-group">
 
@@ -24,20 +24,35 @@
           <i class="fa fa-archive"></i>
         </div>
 
-        <input type="text" class="form-control" id="package-search" placeholder="Packages">
+        <input type="text" ng-model="searchQuery" ng-change="change()" class="form-control" id="package-search" placeholder="Packages">
 
         <span class="input-group-btn">
-          <button class="btn btn-secondary" type="button">
+          <button class="btn btn-secondary" type="button" ng-click="change()">
             <i class="fa fa-search"></i> Search
           </button>
         </span>
 
       </div>
 
+      <ul ng-show="results"  class="list-group">
+        <a class="list-group-item" ng-repeat="package in results" href="/#/detail/{{ package.name }}">
+          <b>{{ package.name }}</b>
+          <div class="pull-right">
+            <span class="tag label label-success" ng-repeat="version in package.versions">
+              {{ version.version }}
+            </span>
+            <span class="tag label label-warning" ng-show="package.versions.length == 0">
+              <i>no version available</i>
+            </span>
+          </div>
+        </a>
+      </ul>
     </div>
 
     <!-- main view -->
-    <div ng-view></div>
+    <div ng-show="!results" class="container">
+      <div ng-view></div>
+    </div>
 
 
     <!-- load the js framework libraries -->
@@ -49,8 +64,8 @@
     <script src="/app/app.module.js"></script>
 
     <!-- load the 'webly' application components -->
-    <sctipt src="/app/components/search/search.controller.js"></script>
-    <sctipt src="/app/components/detail/detail.controller.js"></script>
+    <script src="/app/components/search/search.controller.js"></script>
+    <script src="/app/components/detail/detail.controller.js"></script>
 
   </body>
 </html>

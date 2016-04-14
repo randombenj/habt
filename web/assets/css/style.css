@@ -11,32 +11,13 @@
   $SEARCH
   ---------------------------------------------------------------------------*/
 .search {
-  top: 20px;
-  position: fixed;
-
-  /* used to center fixed search bar */
-  left: 50%;
+  margin-top: 20px;
 }
 
-/* Center the fixed search bar */
-
-/* Small Devices, Small Screens */
-@media (min-width: 768px) {
-  .search {
-    margin-left: -375px;
-  }
+.search > .input-group {
+  margin-bottom: 20px;
 }
 
-/* Small Devices, Small Screens */
-@media (min-width: 992px) {
-  .search {
-    margin-left: -485px;
-  }
-}
-
-/* Large Devices, Wide Screens */
-@media (min-width : 1200px) {
-  .search {
-    margin-left: -600px;
-  }
+.search .label {
+  margin-left: 10px;
 }
