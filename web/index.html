@@ -8,6 +8,7 @@
     <!-- load css frameworks -->
     <link rel="stylesheet" href="/assets/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="/assets/lib/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="/assets/lib/hint.css/hint.css" />
 
     <!-- load custom stylesheet last, to overwrite bootstrap if nescessary -->
     <link rel="stylesheet" href="/assets/css/style.css" />
@@ -38,9 +39,18 @@
         <a class="list-group-item" ng-repeat="package in results" href="/#/detail/{{ package.name }}">
           <b>{{ package.name }}</b>
           <div class="pull-right">
-            <span class="tag label label-success" ng-repeat="version in package.versions">
+
+            <!-- installed versions -->
+            <span class="tag label label-success" ng-repeat="version in package.versions.slice().reverse() | limitTo:10">
               {{ version.version }}
             </span>
+
+            <!-- installed versions -->
+            <span class="tag label label-success" ng-show="package.versions.length > 10" >
+              <span class="hint--left" data-hint="More versions available ...">...</span>
+            </span>
+
+            <!-- no version package warning -->
             <span class="tag label label-warning" ng-show="package.versions.length == 0">
               <i>no version available</i>
             </span>
