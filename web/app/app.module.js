@@ -10,15 +10,9 @@
     // configure the routes
     $routeProvider
 
-      // configure the 'search' route
-      .when('/:query', {
-        templateUrl: 'components/search/search.view.html',
-        controller: 'SearchController'
-      })
-
       // configure the 'detail' route
       .when('/detail/:package', {
-        templateUrl: 'components/detail/detail.view.html',
+        templateUrl: '/app/components/detail/detail.view.html',
         controller: 'DetailController'
       })
 

@@ -1,15 +1,69 @@
 <!DOCTYPE html>
 
-<html>
-  <head ng-app="webly">
+<html lang="en" ng-app="webly">
+  <head>
 
     <title>{ webly }</title>
+
+    <!-- load css frameworks -->
     <link rel="stylesheet" href="/assets/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="/assets/lib/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="/assets/lib/hint.css/hint.css" />
+
+    <!-- load custom stylesheet last, to overwrite bootstrap if nescessary -->
+    <link rel="stylesheet" href="/assets/css/style.css" />
 
   </head>
   <body>
 
-    Hello World
+    <!-- search input -->
+    <div class="container search" ng-controller="SearchController">
+
+      <div class="input-group">
+
+        <div class="input-group-addon">
+          <i class="fa fa-archive"></i>
+        </div>
+
+        <input type="text" ng-model="searchQuery" ng-change="change()" class="form-control" id="package-search" placeholder="Packages">
+
+        <span class="input-group-btn">
+          <button class="btn btn-secondary" type="button" ng-click="change()">
+            <i class="fa fa-search"></i> Search
+          </button>
+        </span>
+
+      </div>
+
+      <ul ng-show="results"  class="list-group">
+        <a class="list-group-item" ng-repeat="package in results" href="/#/detail/{{ package.name }}">
+          <b>{{ package.name }}</b>
+          <div class="pull-right">
+
+            <!-- installed versions -->
+            <span class="tag label label-success" ng-repeat="version in package.versions.slice().reverse() | limitTo:10">
+              {{ version.version }}
+            </span>
+
+            <!-- installed versions -->
+            <span class="tag label label-success" ng-show="package.versions.length > 10" >
+              <span class="hint--left" data-hint="More versions available ...">...</span>
+            </span>
+
+            <!-- no version package warning -->
+            <span class="tag label label-warning" ng-show="package.versions.length == 0">
+              <i>no version available</i>
+            </span>
+          </div>
+        </a>
+      </ul>
+    </div>
+
+    <!-- main view -->
+    <div ng-show="!results" class="container">
+      <div ng-view></div>
+    </div>
+
 
     <!-- load the js framework libraries -->
     <script src="/assets/lib/jquery/dist/jquery.js"></script>
@@ -20,8 +74,8 @@
     <script src="/app/app.module.js"></script>
 
     <!-- load the 'webly' application components -->
-    <sctipt src="/app/components/search/search.controller.js"></script>
-    <sctipt src="/app/components/detail/detail.controller.js"></script>
+    <script src="/app/components/search/search.controller.js"></script>
+    <script src="/app/components/detail/detail.controller.js"></script>
 
   </body>
 </html>

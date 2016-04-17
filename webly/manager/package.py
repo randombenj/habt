@@ -28,6 +28,7 @@ class PackageManager():
                 joinedload('versions')
                     .load_only('version')
             )
+            .limit(50)
             .all()
         )
         return { 'results': results }
