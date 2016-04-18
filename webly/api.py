@@ -36,39 +36,50 @@ def spec():
          Api specification
     """
     swag = swagger(app)
+    # api information
     swag['info']['version'] = "0.0.0"
     swag['info']['title'] = "Webly API"
+    # api prefix
+    swag['basePath'] = "/api"
     return jsonify(swag)
 
 @app.route("/search/<string:query>")
+@cross_origin()
 @jsonapi
 def search(query):
     """
-       Searches debian packages
-       ---
-       tags:
-         - [search, debian, packages]
-       parameters:
-         - query:
-            The search query to search for in the database
-       responses:
-           200:
-               description: Search successfully completed
-    """
+         Returns the details of a debian package
+        ---
+        tags:
+          - search
+
+        parameters:
+          - name: query
+            description: Search query
+            in: path
+            type: string
+
+        responses:
+          200:
+            description: Search was successful
+        """
     return PackageManager().search_packages(query)
 
 
 @app.route("/package/<string:name>")
+@cross_origin()
 @jsonapi
 def package(name):
     """
        Returns the details of a debian package
        ---
        tags:
-         - [details, debian, packages]
+         - package
        parameters:
-         - name:
-             Debian package name
+         - name: name
+           description: Debian package name
+           in: path
+           type: string
        responses:
            200:
                description: Datail successfully loaded
@@ -76,18 +87,23 @@ def package(name):
     return PackageManager().get_package(name)
 
 @app.route("/package/<string:name>/version/<string:version>")
+@cross_origin()
 @jsonapi
 def version(name, version):
     """
-       Returns the details of a debian package
+       Returns the details of a debian package version
        ---
        tags:
-         - [details, debian, packages]
+         - version
        parameters:
-         - name:
-             Debian package name
-         - version:
-             Version of the package
+        - name: name
+          description: Debian package name
+          in: path
+          type: string
+        - name: version
+          description: Package version
+          in: path
+          type: string
        responses:
            200:
                description: Datail successfully loaded
