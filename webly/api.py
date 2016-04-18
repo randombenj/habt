@@ -48,14 +48,51 @@ def search(query):
        ---
        tags:
          - [search, debian, packages]
-       definitions:
+       parameters:
          - query:
-             The search query to search for in the database
+            The search query to search for in the database
        responses:
            200:
                description: Search successfully completed
     """
     return PackageManager().search_packages(query)
+
+
+@app.route("/package/<string:name>")
+@jsonapi
+def package(name):
+    """
+       Returns the details of a debian package
+       ---
+       tags:
+         - [details, debian, packages]
+       parameters:
+         - name:
+             Debian package name
+       responses:
+           200:
+               description: Datail successfully loaded
+    """
+    return PackageManager().get_package(name)
+
+@app.route("/package/<string:name>/version/<string:version>")
+@jsonapi
+def version(name, version):
+    """
+       Returns the details of a debian package
+       ---
+       tags:
+         - [details, debian, packages]
+       parameters:
+         - name:
+             Debian package name
+         - version:
+             Version of the package
+       responses:
+           200:
+               description: Datail successfully loaded
+    """
+    return PackageManager().get_package_version(name, version)
 
 if __name__ == "__main__":
     app.run('0.0.0.0', port=8000)
