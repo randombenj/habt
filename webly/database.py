@@ -22,9 +22,11 @@ session = scoped_session(
     )
 )
 
+
 class GetOrCreateMixin():
     '''
-        Mixin to add the get_or_create and get_or_add methods to required models
+        Mixin to add the get_or_create and get_or_add
+        methods to required models
     '''
     @classmethod
     def get_or_create(cls, **kwargs):
@@ -40,7 +42,6 @@ class GetOrCreateMixin():
         '''
         instance = session.query(cls).filter_by(**kwargs).first()
         return instance if instance else cls(**kwargs)
-
 
     @classmethod
     def get_or_add(cls, **kwargs):
@@ -68,11 +69,13 @@ Base = declarative_base(cls=(JsonSerializableBase))
 Base.query = session.query_property()
 Base.metadata.bind = engine
 
+
 def drop():
     '''
         Drops the database
     '''
     Base.metadata.drop_all()
+
 
 def create():
     '''

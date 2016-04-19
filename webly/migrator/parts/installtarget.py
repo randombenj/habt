@@ -1,14 +1,17 @@
-from webly.models import (InstallTarget,
+from webly.models import (
+    InstallTarget,
     Architecture,
     Part,
     Distribution,
-    Archive)
+    Archive
+)
 from webly.migrator.helper import timeit
 from webly.database import session
 
 import logging
 
 log = logging.getLogger(__name__)
+
 
 class InstallTargetMigrator():
 
@@ -40,7 +43,6 @@ class InstallTargetMigrator():
                             name=architecture['Architecture']
                         )
                     ))
-                    #session.commit()
 
                 session.add(InstallTarget(
                     archive=archive,

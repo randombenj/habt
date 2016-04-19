@@ -2,14 +2,15 @@ import os
 import logging
 import logging.config
 
+
 class Config():
 
     def __init__(self):
         self._db_name = os.environ['DB_NAME']
-        self._db_user =  os.environ['DB_USER']
-        self._db_password =  os.environ['DB_PASS']
-        self._db_service =  os.environ['DB_SERVICE']
-        self._db_port =  os.environ['DB_PORT']
+        self._db_user = os.environ['DB_USER']
+        self._db_password = os.environ['DB_PASS']
+        self._db_service = os.environ['DB_SERVICE']
+        self._db_port = os.environ['DB_PORT']
         self._sqlalchemy_db_uri = 'postgresql://{0}:{1}@{2}:{3}/{4}'.format(
             self._db_user,
             self._db_password,
@@ -25,7 +26,6 @@ class Config():
             Returns the Sql Alchemy Postgres SQL connection URI
         '''
         return self._sqlalchemy_db_uri
-
 
     @property
     def debug(self):

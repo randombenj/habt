@@ -4,6 +4,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
+
 class Descriptions(Deb822):
     """Represent a translated description list"""
 
@@ -20,8 +21,14 @@ class Descriptions(Deb822):
 
         See the Deb822.iter_paragraphs function for details.
         """
-        return super(Descriptions, cls).iter_paragraphs(sequence, fields,
-                                    use_apt_pkg, shared_storage, encoding)
+        return super(Descriptions, cls).iter_paragraphs(
+            sequence,
+            fields,
+            use_apt_pkg,
+            shared_storage,
+            encoding
+        )
+
 
 class Contents():
     """Represent the binary packages file contents list"""
@@ -33,7 +40,7 @@ class Contents():
         if not content:
             return contents
 
-        found_beginning=False
+        found_beginning = False
         for line in content.splitlines():
             if found_beginning:
                 line_content = line.split()
@@ -46,7 +53,6 @@ class Contents():
                 found_beginning = True
 
         return contents
-
 
 
 def timeit(method):

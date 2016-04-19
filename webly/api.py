@@ -21,12 +21,14 @@ app.debug = config.debug
 # uses the <obj>.__json__() method to encode json
 app.json_encoder = DynamicJSONEncoder
 
+
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     """
         Destroy the Database session at the end of a request
     """
     session.remove()
+
 
 @app.route("/spec")
 @cross_origin()
@@ -42,6 +44,7 @@ def spec():
     # api prefix
     swag['basePath'] = "/api"
     return jsonify(swag)
+
 
 @app.route("/search/<string:query>")
 @cross_origin()
@@ -85,6 +88,7 @@ def package(name):
                description: Datail successfully loaded
     """
     return PackageManager().get_package(name)
+
 
 @app.route("/package/<string:name>/version/<string:version>")
 @cross_origin()

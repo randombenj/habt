@@ -6,6 +6,7 @@ from webly.database import drop, create
 from webly.migrator import Migrator
 from webly.config import Config
 
+
 @click.command()
 def init():
     drop()
