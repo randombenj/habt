@@ -16,6 +16,13 @@
    */
   function SearchController ( $scope, $http ) {
 
+    $scope.clearResults = function () {
+
+      // when a user clicks on a result,
+      // hide the shown suggestions
+      $scope.results = [];
+    };
+
     /**
      * Gets called when the search input changes
      */

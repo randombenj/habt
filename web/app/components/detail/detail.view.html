@@ -1,0 +1,131 @@
+<!-- package detail view -->
+
+<h1>
+  {{ package.name }}
+
+  <small class="pull-right" ng-show="version">
+      {{ version.version }}
+  </small>
+</h1>
+
+<div ng-show="package.referenced_by.length" class="panel panel-default">
+
+  <div  class="panel-heading">
+    <b class="hint--right" data-hint="{{ package.name }} is referenced by these packages" >Referenced by</b>
+  </div>
+
+  <div class="panel-body">
+    <div class="default-spacing" ng-repeat="referenced in package.referenced_by">
+      <b>
+        <a href="/#/detail/{{ referenced.package_version.package.name }}">
+          {{ referenced.package_version.package.name }}
+        </a>
+      </b>
+      ({{ referenced.package_version.version }})
+    </div>
+  </div>
+
+</div>
+
+<h3>Available Versions</h3>
+
+<ul class="list-group">
+  <a
+    class="list-group-item"
+    ng-repeat="packageVersion in package.versions"
+    ng-click="loadVersionData( packageVersion.version )"
+    ng-class="{ 'list-active': packageVersion.version == version.version }" >
+
+    <b>{{ packageVersion.version }}</b>
+
+    <div class="pull-right">
+
+      <!-- installtargets -->
+      <span
+        class="tag label label-default"
+        ng-repeat="
+          target in packageVersion.installtargets.slice().reverse() |
+          limitTo:10
+        ">
+        {{ target.distribution.name }}/{{ target.part.name }}
+      </span>
+
+    </div>
+
+  </a>
+</ul>
+
+<div ng-show="version">
+
+  <div class="bs-callout bs-callout-default">
+    <h4>{{ version.title }}</h4>
+    <p class="paragraph-text ">{{ version.description }}</p>
+
+    <div class="key-value">
+      <b>Maintainer</b>
+      {{ version.maintainer }}
+    </div>
+  </div>
+
+  <h3>Package sources</h3>
+
+  <div ng-repeat="target in version.installtargets" class="panel panel-default">
+    <div class="panel-heading">
+
+      <div class="row">
+        <div class="col-sm-8">
+          <span class="source-list">
+            deb <a href="{{ target.archive.url}}" target="_blank">{{ target.archive.url }}</a> {{ target.distribution.name }} {{ target.part.name }}
+          </span>
+        </div>
+        <div class="col-sm-4">
+          <button
+            ngclipboard
+            class="btn hint--left pull-right"
+            data-hint="Copy to clipboard"
+            data-clipboard-text="deb {{ target.archive.url }} {{ target.distribution.name }} {{ target.part.name }}" >
+            Copy
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="panel-body">
+
+      <div class="key-value">
+        <b>Distribution / Part</b>
+        <a href="{{  target.archive.url }}/dists/{{ target.distribution.name }}/{{ target.part.name }}" target="_blank">
+          {{ target.distribution.name }}/{{ target.part.name }}
+        </a>
+      </div>
+
+      <div class="key-value">
+        <b>Architecture</b>
+        <span class="tag label label-default">{{ target.architecture.name }}</span>
+      </div>
+
+    </div>
+  </div>
+
+  <h3>Package dependencies</h3>
+
+  <div ng-repeat="section in version.dependencies" class="panel panel-default">
+
+    <div  class="panel-heading">
+      <b>{{ section.section }}</b>
+    </div>
+
+    <div class="panel-body">
+      <div class="default-spacing" ng-repeat="dependency in section.dependencies">
+        <b>
+          <a href="/#/detail/{{ dependency.package.name }}">
+            {{ dependency.package.name }}
+          </a>
+        </b>
+        {{ dependency.version }}
+      </div>
+    </div>
+
+  </div>
+</div>

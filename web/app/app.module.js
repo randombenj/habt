@@ -1,8 +1,13 @@
 (function () {
   'use strict';
 
-  // declare the 'webly' module and add the route module
-  var webly = angular.module('webly', ['ngRoute']);
+  // declare the 'webly' module
+  var webly = angular.module( 'webly', [
+    // angular router plugin
+    'ngRoute',
+    // angular clipboard plugin
+    'ngclipboard'
+  ]);
 
   // define routes using the route provider (angular router)
   webly.config( [ '$routeProvider', function( $routeProvider ) {
