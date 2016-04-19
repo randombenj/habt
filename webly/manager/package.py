@@ -6,22 +6,6 @@ from webly.models import Package, PackageVersion
 
 class PackageManager():
 
-    # Helper methods
-    def __get_package_query(self, name):
-        '''
-            name:
-             Name of the package
-
-            returns:
-             The basic package query filtering by name
-        '''
-        return (Package.query
-            .filter(
-                Package.name == name
-            )
-        )
-
-
     def search_packages(self, query):
         '''
             query:
@@ -65,21 +49,28 @@ class PackageManager():
                 .filter(
                     Package.name == package_name
                 )
-                # load all versions of the package
+                # options to load the required joined data
                 .options(
+                    # load all versions of the package
+                    joinedload('versions'),
+
+                    # load the part the installtarget
                     joinedload('versions')
-                )
-                # load all the packages depending on this package
-                .options(
+                        .joinedload('installtargets')
+                            .joinedload('part'),
+                    # load the distribution the installtarget
+                    joinedload('versions')
+                        .joinedload('installtargets')
+                            .joinedload('distribution'),
+
+                    # load all the packages depending on this package
                     joinedload('referenced_by')
                         .joinedload('package_version')
-                            .joinedload('package')
-
-                )
-                # load all the dependency sections of the packages depending on this package
-                .options(
+                            .joinedload('package'),
+                    # load all the dependency sections of the packages depending on this package
                     joinedload('referenced_by')
                         .joinedload('dependency_section')
+
                 )
             ).first()
         }
@@ -105,21 +96,34 @@ class PackageManager():
                 Package.name == package_name,
                 PackageVersion.version == version
             )
-            # load the dependencies and packages
             .options(
+                # load the dependencies and packages
                 joinedload('dependencies')
-                    .joinedload('package')
-            )
-            # load the dependency sections
-            .options(
+                    .joinedload('package'),
+                # load the dependency sections
                 joinedload('dependencies')
-                    .joinedload('dependency_section')
+                    .joinedload('dependency_section'),
+
+                # load the part the installtarget
+                joinedload('installtargets')
+                    .joinedload('part'),
+                # load the distribution the installtarget
+                joinedload('installtargets')
+                    .joinedload('distribution'),
+                # load the archive the installtarget
+                joinedload('installtargets')
+                    .joinedload('archive'),
+                # load the architecture the installtarget
+                joinedload('installtargets')
+                    .joinedload('architecture'),
             )
             .first()
         ).__json__()
 
         # group the package versions by theyr section, so they can be
         # displayed easily
+        # The .__json__() call is required because sqlalchemy detects
+        # changes on the model objects.
         version['dependencies'] = [
             {
                 'section': k.name,
