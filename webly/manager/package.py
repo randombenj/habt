@@ -4,6 +4,7 @@ from sqlalchemy.orm import joinedload
 from webly.database import session
 from webly.models import Package, PackageVersion
 
+
 class PackageManager():
 
     def search_packages(self, query):
@@ -33,7 +34,7 @@ class PackageManager():
             .limit(50)
             .all()
         )
-        return { 'results': results }
+        return {'results': results}
 
     def get_package(self, package_name):
         '''
@@ -67,7 +68,8 @@ class PackageManager():
                     joinedload('referenced_by')
                         .joinedload('package_version')
                             .joinedload('package'),
-                    # load all the dependency sections of the packages depending on this package
+                    # load all the dependency sections of the packages,
+                    # depending on this package
                     joinedload('referenced_by')
                         .joinedload('dependency_section')
 
@@ -131,8 +133,7 @@ class PackageManager():
             } for k, g in
                 groupby(
                     version['dependencies'],
-                    lambda d: d.__json__()['dependency_section']
-                )
+                    lambda d: d.__json__()['dependency_section'])
         ]
 
-        return { 'version': version }
+        return {'version': version}

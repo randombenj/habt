@@ -7,6 +7,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
+
 class Source():
     def __init__(self, filename):
         self._filename = filename
@@ -79,7 +80,7 @@ class Source():
 
 class SourceList():
     def __init__(self, sources_list_file):
-        self._current_index = 0 # index tracking for the current ge
+        self._current_index = 0  # index tracking for the current ge
         self._raw_sources_list = []
 
         with open(sources_list_file) as sources_list:
@@ -88,7 +89,6 @@ class SourceList():
                 s.strip() for s in sources_list.readlines()
                 if s.strip() and not s.startswith('#')
             ]
-
 
     @property
     def entries(self):
@@ -122,7 +122,8 @@ class SourceListEntry():
 
         if response.ok:
             release = next(Release.iter_paragraphs(response.text))
-            # if no expicit arcitectures are defined, use all given in the release file
+            # if no expicit arcitectures are defined,
+            # use all given in the release file
             if not self._architectures:
                 self._architectures = release['Architectures'].split()
 
@@ -134,16 +135,24 @@ class SourceListEntry():
                     '-udeb' not in f['name'] and
                     'debian-installer' not in f['name'] and
                     # use only the gzip compressed files
-                    ('.gz' in f['name'] or 'Translation-en.bz2' in f['name'])and
+                    (
+                        '.gz' in f['name'] or
+                        'Translation-en.bz2' in f['name']
+                    ) and
                     any([
                         # filter for the requested parts
                         p for p in self._parts
-                        if p in f['name']]
-                    ) and
+                        if p in f['name']
+                    ]) and
                     any([
-                        # filter for the requested architectures ignoring the source packages
+                        # filter for the requested architectures
+                        # ignoring the source packages
                         a for a in self._architectures
-                        if a in f['name'] or 'Sources' in f['name'] or 'Translation-en' in f['name']
+                        if (
+                            a in f['name'] or
+                            'Sources' in f['name'] or
+                            'Translation-en' in f['name']
+                        )
                     ])
                 )
             ]
@@ -220,8 +229,8 @@ class SourceListEntry():
         '''
         return {'Descriptions': next(
             (f for f in self._files
-            if 'Translation-en' in f['name']),
-            {'name': ''} # default value
+                if 'Translation-en' in f['name']),
+            {'name': ''}  # default value
         )}
 
     def get_files(self, architecture):
@@ -233,7 +242,7 @@ class SourceListEntry():
              The listed files in the Release file matching the given
              Architecture
         '''
-        if not architecture in self._architectures:
+        if architecture not in self._architectures:
             return []
 
         # filter the files for a matching architecture

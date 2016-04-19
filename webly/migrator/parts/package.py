@@ -1,20 +1,25 @@
 from itertools import groupby
-from webly.models import (Package,
+from webly.models import (
+    Package,
     PackageVersion,
     PackageSection,
     DependencySection,
-    Dependency)
-from webly.models import (InstallTarget,
+    Dependency
+)
+from webly.models import (
+    InstallTarget,
     Architecture,
     Archive,
     Distribution,
-    Part)
+    Part
+)
 from webly.migrator.helper import timeit
 from webly.database import session
 
 import logging
 
 log = logging.getLogger(__name__)
+
 
 class PackageMigrator():
     def __init__(self, packages):
@@ -46,9 +51,11 @@ class PackageMigrator():
                     .filter(
                         (Archive.url == source_list_entry.archive) &
                         (Distribution.name == source_list_entry.distribution) &
-                        (Part.name == source_list_entry.parts[0]) & # TODO: loop through parts in source.py
+                        # TODO: loop through parts in source.py
+                        (Part.name == source_list_entry.parts[0]) &
                         (Architecture.name == architecture['Architecture'])
-                ).one())
+                    ).one()
+                )
 
                 # Load the 'all' installtarget separatly
                 installtarget_all = (InstallTarget.query
@@ -59,9 +66,11 @@ class PackageMigrator():
                     .filter(
                         (Archive.url == source_list_entry.archive) &
                         (Distribution.name == source_list_entry.distribution) &
-                        (Part.name == source_list_entry.parts[0]) & # TODO: loop through parts in source.py
+                        # TODO: loop through parts in source.py
+                        (Part.name == source_list_entry.parts[0]) &
                         (Architecture.name == 'all')
-                ).one())
+                    ).one()
+                )
 
                 if installtarget:
                     log.info('Installtarget: {0}'.format(installtarget))
@@ -94,13 +103,21 @@ class PackageMigrator():
                     Package.query.count()
                 ))
 
-    def _package_version(self, package, version, source_packages, description_list, installtarget):
+    def _package_version(
+        self,
+        package,
+        version,
+        source_packages,
+        description_list,
+        installtarget
+    ):
         if package.id:
             db_version = (PackageVersion.query
                 .filter(
                     PackageVersion.package_id == package.id,
                     PackageVersion.version == version['Version']
-                ).first())
+                ).first()
+            )
             if db_version:
                 db_version.installtargets.append(installtarget)
                 log.info('Version allready exists {0} ({1})'.format(
@@ -112,8 +129,8 @@ class PackageMigrator():
         # Get the source package for source code information
         source_package = next(
             (s for s in source_packages
-            if package.name in s['Binary']),
-            {} # default value
+                if package.name in s['Binary']),
+            {}  # default value
         )
         # remove the old entry for performance reason
         if source_package and source_package['Binary'] == package.name:
@@ -123,8 +140,8 @@ class PackageMigrator():
         # Get the package description
         description = next(
             (d for d in description_list
-            if package.name in d['Package']),
-            {} # default value
+                if package.name in d['Package']),
+            {}  # default value
         )
 
         # assign default value
@@ -164,8 +181,7 @@ class PackageMigrator():
 
     def _package_dependencies(self, version, package_version):
         for section in version.relations:
-            dependency_section = (DependencySection
-                .query
+            dependency_section = (DependencySection.query
                 .filter(
                     DependencySection.name == section
                 ).first())
