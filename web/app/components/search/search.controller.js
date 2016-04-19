@@ -50,7 +50,7 @@
           function success( data ) {
 
             // log the data in the console
-            console.log( data );
+            console.log( 'Got from ' + data.config.url + ': ', data );
 
             // display the search results
             $scope.results = data.data.results;
@@ -64,7 +64,7 @@
           function error( error ) {
 
             // log the error in the console
-            console.error( error );
+            console.error( 'Error from ' + error.config.url + ': ', error );
           }
         );
       }

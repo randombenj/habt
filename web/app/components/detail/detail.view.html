@@ -5,6 +5,11 @@
 
   <small class="pull-right" ng-show="version">
       {{ version.version }}
+
+
+        <a ng-show="version.homepage" target="_blank" class="hint--left package-homepage" data-hint="Homepage of this Package" href="{{ version.homepage }}">
+          <i class="fa fa-external-link"></i>
+        </a>
   </small>
 </h1>
 
@@ -64,6 +69,11 @@
     <div class="key-value">
       <b>Maintainer</b>
       {{ version.maintainer }}
+    </div>
+
+    <div class="key-value" ng-show="version.vcs_browser">
+      <b>Sourcecode</b>
+      <a href="{{ version.vcs_browser }}" target="_blank">{{ version.vcs_browser }}</a>
     </div>
   </div>
 
