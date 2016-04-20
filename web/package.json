@@ -1,0 +1,29 @@
+{
+  "name": "webly",
+  "version": "0.0.0",
+  "description": "Web based visualization of a debian linux package server",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "karma": "~0.13.22",
+    "jasmine-core": "~2.4.1",
+    "karma-jasmine": "~0.3.8",
+    "karma-chrome-launcher": "~0.2.3",
+    "karma-coverage": "~0.5.5",
+    "angular-mocks": "~1.5.5",
+    "jasmine-jquery": "~2.1.1",
+    "karma-jasmine-html-reporter": "~0.2.0"
+  },
+  "scripts": {
+    "test": "./node_modules/karma/bin/karma start karma.config.js "
+  },
+  "keywords": [
+    "webly",
+    "debian",
+    "packages",
+    "web",
+    "vizualisation",
+    "linux"
+  ],
+  "author": "Benj Fassbind <randombenj@gmail.com>"
+}
