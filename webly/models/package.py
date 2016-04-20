@@ -11,7 +11,8 @@ class Package(GetOrCreateMixin, Base):
     name = Column(String)
     versions = relationship(
         "PackageVersion",
-        back_populates="package"
+        back_populates="package",
+        order_by="desc(PackageVersion.version)"
     )
     referenced_by = relationship(
         "Dependency",
