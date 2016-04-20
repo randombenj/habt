@@ -7,6 +7,7 @@
 
     <!-- load css frameworks -->
     <link rel="stylesheet" href="/assets/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap.callout.css" />
     <link rel="stylesheet" href="/assets/lib/font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href="/assets/lib/hint.css/hint.css" />
 
@@ -19,10 +20,20 @@
     <!-- search input -->
     <div class="container search" ng-controller="SearchController">
 
+      <!-- global error mesages -->
+      <div ng-repeat="alert in $root.alerts" ng-class="{ 'alert-{{ alert.type }}': alert.type }" class="alert" role="alert">
+        {{ alert.msg }}
+        <button type="button" class="close" ng-click="$root.alerts.splice($index, 1)">
+          <span>×</span>
+        </button>
+      </div>
+
       <div class="input-group">
 
         <div class="input-group-addon">
-          <i class="fa fa-archive"></i>
+          <span class="hint--right" data-hint="Search for debian packages">
+            <i class="fa fa-archive"></i>
+          </span>
         </div>
 
         <input type="text" ng-model="searchQuery" ng-change="change()" class="form-control" id="package-search" placeholder="Packages">
@@ -36,17 +47,17 @@
       </div>
 
       <ul ng-show="results"  class="list-group">
-        <a class="list-group-item" ng-repeat="package in results" href="/#/detail/{{ package.name }}">
+        <a class="list-group-item" ng-repeat="package in results" ng-click="clearResults()" href="/#/detail/{{ package.name }}">
           <b>{{ package.name }}</b>
           <div class="pull-right">
 
             <!-- installed versions -->
-            <span class="tag label label-success" ng-repeat="version in package.versions.slice().reverse() | limitTo:10">
+            <span class="tag label label-default" ng-repeat="version in package.versions | limitTo:10">
               {{ version.version }}
             </span>
 
             <!-- installed versions -->
-            <span class="tag label label-success" ng-show="package.versions.length > 10" >
+            <span class="tag label label-default" ng-show="package.versions.length > 10" >
               <span class="hint--left" data-hint="More versions available ...">...</span>
             </span>
 
@@ -69,6 +80,8 @@
     <script src="/assets/lib/jquery/dist/jquery.js"></script>
     <script src="/assets/lib/angular/angular.js"></script>
     <script src="/assets/lib/angular-route/angular-route.js"></script>
+    <script src="/assets/lib/clipboard/dist/clipboard.js"></script>
+    <script src="/assets/lib/ngclipboard/dist/ngclipboard.js"></script>
 
     <!-- load the 'webly' angular module -->
     <script src="/app/app.module.js"></script>
