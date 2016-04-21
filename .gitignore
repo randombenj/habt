@@ -11,4 +11,6 @@ web/assets/lib/*
 web/node_modules/
 
 # code coverage
-web/_coverage
+web/.coverage
+webly/.coverage
+webly/htmlcov

@@ -66,7 +66,7 @@ module.exports = function( config ) {
 
       // generate html coverage report
       type : 'html',
-      dir : '_coverage/'
+      dir : '.coverage/'
     }
   });
 };
