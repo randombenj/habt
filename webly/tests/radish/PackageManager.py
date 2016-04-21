@@ -1,36 +1,60 @@
+import json
+from webly.api import app
+
 from radish import given, when, then
 
 from webly.manager import PackageManager
 from webly.models import Package
 
 
-@given("The PackageManager is set up")
+def _dict_response(response):
+    '''
+        Converts the json response string to a dictionary
+    '''
+    return json.loads(next(response.response).decode("utf-8"))
+
+
+@given("The api is ready")
 def have_numbers(step):
-    step.context.manager = PackageManager()
+    app.testing = True
+    step.context.client = app.test_client()
 
 
 @when("I search for {query:w}")
 def search_package(step, query):
-    step.context.result = step.context.manager.search_packages(query)
+    response = step.context.client.get(
+        '/search/{0}'.format(query)
+    )
+    assert response.status_code == 200
+    step.context.result = _dict_response(response)
 
 
 @when("I request the {package_name} package")
 def get_package(step, package_name):
-    step.context.package = step.context.manager.get_package(package_name)
+    response = step.context.client.get(
+        '/package/{0}'.format(package_name)
+    )
+    assert response.status_code == 200
+    step.context.package = _dict_response(response)
 
 
 @when("I request the version {version} of the {package_name:w} package")
 def get_package_version(step, version, package_name):
-    package_version = step.context.manager .get_package_version(
-        package_name,
-        version
+    response = step.context.client.get(
+        '/package/{0}/version/{1}'.format(
+            package_name,
+            version
+        )
     )
-    step.context.version = package_version
-
+    assert response.status_code == 200
+    step.context.version = _dict_response(response)
 
 @then("I expect {result:w} to be in the results list")
 def expect_result(step, result):
-    assert result in [r.name for r in step.context.result['results']]
+    assert result in [
+        r['name'] for r in
+        step.context.result['results']
+    ]
 
 
 @then("I expect {count:g} packages to be found")
@@ -40,7 +64,7 @@ def expect_result_count(step, count):
 
 @then("I expect the package {package:w}")
 def expect_package(step, package):
-    assert step.context.package['package'].name == package
+    assert step.context.package['package']['name'] == package
 
 
 @then("I don't expect there to be any package")
@@ -51,10 +75,13 @@ def expect_no_package(step):
 @then("I expect the version {version} of the {package_name:w} package")
 def expect_package_version(step, version, package_name):
     # TODO fix context error
-    package_version = step.context.manager.get_package_version(
-        package_name,
-        version
-    )
+    # print(step.context.__dict__)
+    package_version = _dict_response(step.context.client.get(
+        '/package/{0}/version/{1}'.format(
+            package_name,
+            version
+        )
+    ))
     package = (Package.query
         .filter(
             Package.id == package_version['version']['package_id']
