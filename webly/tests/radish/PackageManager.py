@@ -49,6 +49,7 @@ def get_package_version(step, version, package_name):
     assert response.status_code == 200
     step.context.version = _dict_response(response)
 
+
 @then("I expect {result:w} to be in the results list")
 def expect_result(step, result):
     assert result in [
