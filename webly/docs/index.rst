@@ -3,24 +3,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Webly's documentation!
+Webly documentation
 =================================
 
-Contents:
-
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 2
+
+   parts/setup.rst
+   parts/testing.rst
+   parts/api.docs.rst
 
    modules/modules.rst
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
 .. automodule:: template
     :members:
