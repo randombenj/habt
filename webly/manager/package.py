@@ -94,6 +94,7 @@ class PackageManager():
              with the loaded package and version if any is given
         '''
         version = (PackageVersion.query
+            .join(Package)
             .filter(
                 Package.name == package_name,
                 PackageVersion.version == version
