@@ -9,6 +9,12 @@ module.exports = function( config ) {
   // configure the runner
   config.set({
 
+    // set the base path (angular app root)
+    basePath: '../../',
+
+    // run the tests only once
+    singleRun: true,
+
     // files to load (frameworks, application, tests)
     files: [
 
@@ -35,7 +41,7 @@ module.exports = function( config ) {
       'app/**/*.js',
 
       // angular tests
-      'tests/**/*.test.js'
+      'tests/unit/*.test.js'
     ],
 
     // use jasmine as testing framework
@@ -66,7 +72,7 @@ module.exports = function( config ) {
 
       // generate html coverage report
       type : 'html',
-      dir : '.coverage/'
+      dir : 'tests/unit/.coverage/'
     }
   });
 };

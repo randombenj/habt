@@ -15,7 +15,9 @@
     "karma-jasmine-html-reporter": "~0.2.0"
   },
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start karma.config.js "
+    "test": "npm run-script test.unit && npm run-script test.e2e",
+    "test.unit": "./node_modules/karma/bin/karma start tests/unit/karma.config.js",
+    "test.e2e": "echo 'comming soon ...'"
   },
   "keywords": [
     "webly",
