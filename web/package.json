@@ -12,12 +12,13 @@
     "karma-coverage": "~0.5.5",
     "angular-mocks": "~1.5.5",
     "jasmine-jquery": "~2.1.1",
-    "karma-jasmine-html-reporter": "~0.2.0"
+    "karma-jasmine-html-reporter": "~0.2.0",
+    "protractor": "~2.5.1"
   },
   "scripts": {
     "test": "npm run-script test.unit && npm run-script test.e2e",
     "test.unit": "./node_modules/karma/bin/karma start tests/unit/karma.config.js",
-    "test.e2e": "echo 'comming soon ...'"
+    "test.e2e": "tests/e2e/test.executor"
   },
   "keywords": [
     "webly",

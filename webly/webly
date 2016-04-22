@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import os
 import click
 import logging
 from webly.database import drop, create

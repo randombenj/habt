@@ -31,6 +31,7 @@ class PackageManager():
                 joinedload('versions')
                     .load_only('version')
             )
+            .order_by(Package.name)
             .limit(50)
             .all()
         )
