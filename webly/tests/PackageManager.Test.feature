@@ -6,19 +6,19 @@ Feature: Test the functionality of the PackageManager
   # Search tests:
 
   @good_case
-  Scenario: Serach for debian packages
+  Scenario: Search for debian packages
     Given The api is ready
     When I search for lib
     Then I expect 6 packages to be found
 
   @good_case
-  Scenario: Serach for debian package libskynet
+  Scenario: Search for debian package libskynet
     Given The api is ready
     When I search for lib
     Then I expect libskynet to be in the results list
 
   @bad_case
-  Scenario: Serach for a package that does not exist
+  Scenario: Search for a package that does not exist
     Given The api is ready
     When I search for asdfasdf
     Then I expect 0 packages to be found
