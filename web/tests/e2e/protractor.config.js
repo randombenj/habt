@@ -1,3 +1,4 @@
+var reporter = require('protractor-html-screenshot-reporter');
 
 /**
  * The protractor test engine config
@@ -15,5 +16,18 @@ exports.config = {
   specs: [
     'search.test.js',
     'details.test.js'
-  ]
+  ],
+
+  // test it in firefox and chrome
+  multiCapabilities: [
+    {'browserName': 'chrome'},
+    {'browserName': 'firefox'}
+  ],
+
+  onPrepare: function() {
+      // Add a screenshot reporter and store screenshots to `/tmp/screnshots`:
+      jasmine.getEnv().addReporter(new reporter({
+         baseDirectory: '.coverage/'
+      }));
+   }
 };

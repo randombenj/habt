@@ -10,7 +10,7 @@ describe('The package details page', function() {
     };
   };
 
-  it('should display the "libskynet" package', function() {
+  it('should display the "libskynet" package', function () {
 
     browser.get('http://localhost');
 
@@ -33,69 +33,91 @@ describe('The package details page', function() {
       });
     });
   });
+});
 
-  describe('The "libskynet" details page', function () {
+describe('The "libskynet" details page', function () {
 
-    browser.get('http://localhost/#/detail/libskynet');
+  browser.get('http://localhost/#/detail/libskynet');
 
-    it('should show that "libskynet" is referenced by "shuttle"', function () {
+  it('should show that "libskynet" is referenced by "shuttle"', function () {
 
-      var referencedBy = element.all(by.repeater('referenced in package.referenced_by'));
+    var referencedBy = element.all(by.repeater('referenced in package.referenced_by'));
 
-      expect(referencedBy.count()).toEqual(1);
+    expect(referencedBy.count()).toEqual(1);
 
-      // check the package link
-      expect(referencedBy.all(by.css('b > a')).getAttribute('href'))
-        .toMatch('http://localhost/#/detail/shuttle');
+    // check the package link
+    expect(referencedBy.all(by.css('b > a')).getAttribute('href'))
+      .toMatch('http://localhost/#/detail/shuttle');
 
-      // check the package name which references this package
-      expect(referencedBy.all(by.css('b > a')).getText())
-        .toMatch('shuttle');
-    });
+    // check the package name which references this package
+    expect(referencedBy.all(by.css('b > a')).getText())
+      .toMatch('shuttle');
+  });
 
-    it('should show a title but no description', function () {
+  it('should show a title but no description', function () {
 
-      var callout = element.all(by.css('.bs-callout'));
+    var callout = element.all(by.css('.bs-callout'));
 
-      expect(callout.count()).toEqual(1);
+    expect(callout.count()).toEqual(1);
 
-      // check the title and description
-      expect(callout.all(by.css('h4')).getText())
-        .toMatch('This is the skynet library package');
+    // check the title and description
+    expect(callout.all(by.css('h4')).getText())
+      .toMatch('This is the skynet library package');
 
-      // check the description (empty)
-      expect(callout.all(by.css('p.paragraph-text')).getText())
-        .toMatch('');
-    });
+    // check the description (empty)
+    expect(callout.all(by.css('p.paragraph-text')).getText())
+      .toMatch('');
+  });
 
-    it('should show a maintainer but no link to the sourcecode', function () {
+  it('should show a maintainer but no link to the sourcecode', function () {
 
-      var callout = element.all(by.css('.bs-callout'));
+    var callout = element.all(by.css('.bs-callout'));
 
-      // Check the maintainer
-      expect(callout.all(by.css('div.key-value')).first().getText())
-        .not.toBe('');
+    // Check the maintainer
+    expect(callout.all(by.css('div.key-value')).first().getText())
+      .not.toBe('');
 
-      // check the sourcecode link (empty)
-      expect(callout.all(by.css('div.key-value')).get(1).getText())
-        .toMatch('');
-    });
+    // check the sourcecode link (empty)
+    expect(callout.all(by.css('div.key-value')).get(1).getText())
+      .toMatch('');
+  });
 
-    it('should show the distribution and architecture', function () {
+  it('should show the distribution and architecture', function () {
 
-      var installtargets = element.all(by.repeater('target in version.installtargets'));
+    var installtargets = element.all(by.repeater('target in version.installtargets'));
 
-      expect(installtargets.all(by.css('.panel-body  div.key-value .tag')).first().getText())
-        .toMatch('amd64');
-    });
+    expect(installtargets.all(by.css('.panel-body  div.key-value .tag')).first().getText())
+      .toMatch('amd64');
+  });
 
-    it('should show the correct dependencies', function () {
+  it('should show the correct dependencies', function () {
 
-      var dependencies = element.all(by.repeater('section in version.dependencies')).first()
-        .all(by.repeater('dependency in section.dependencies'));
+    var dependencies = element.all(by.repeater('section in version.dependencies')).first()
+      .all(by.repeater('dependency in section.dependencies'));
 
-      expect(dependencies.count()).toEqual(5);
-    });
+    expect(dependencies.count()).toEqual(5);
+  });
+});
+
+describe('The "pycsmbuilder" details page', function () {
+
+  it('should find the correct versions in the correct order', function () {
+
+    var expected = [
+      '1.1.0+deb8u3',
+      '1.1.0+deb8u2',
+      '1.1.0+deb8u1',
+      '1.1.0',
+      '1.0.0'
+    ];
+
+    browser.get('http://localhost/#/detail/pycsmbuilder');
+
+    var versions = element.all(by.repeater('packageVersion in package.versions'));
+
+    for (var i = 0; i < versions.length; i++) {
+      expect(versions[i].all(by.css('b')).getText()).toMatch(expected[i]);
+    }
 
   });
 });
