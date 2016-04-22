@@ -1,17 +1,28 @@
 import json
 from webly.api import app
 
-from radish import given, when, then
+from radish import given, when, then, before
 
+from webly.database import drop, create, session
+from webly.migrator import Migrator
 from webly.manager import PackageManager
 from webly.models import Package
 
+import logging
 
 def _dict_response(response):
     '''
         Converts the json response string to a dictionary
     '''
     return json.loads(next(response.response).decode("utf-8"))
+
+
+@before.each_feature
+def migrate_database(scenario):
+    session.remove()
+    drop()
+    create()
+    Migrator('sources.list').run()
 
 
 @given("The api is ready")

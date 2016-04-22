@@ -1,3 +1,4 @@
+@regression
 Feature: Test the functionality of the Migrator
   In order to be shure the correct data is served
   from the api, the migrator has to be tested

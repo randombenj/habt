@@ -1,12 +1,11 @@
+@regression
 Feature: Test the functionality of the PackageManager
   In order to enshure the functionality of the api
   the PackageManager has to work propperly
 
-
   # Search tests:
 
   @good_case
-  @precondition(Migrator.Test.feature: Run a migration)
   Scenario: Serach for debian packages
     Given The api is ready
     When I search for lib
