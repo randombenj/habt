@@ -12,5 +12,8 @@ exports.config = {
   seleniumAddress: 'http://localhost:4444/wd/hub',
 
   // tests to execute
-  specs: ['search.test.js']
+  specs: [
+    'search.test.js',
+    'details.test.js'
+  ]
 };
