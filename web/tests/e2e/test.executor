@@ -9,8 +9,8 @@
 
 # start the tests
 # start the webdriver
-./node_modules/protractor/bin/webdriver-manager update
-./node_modules/protractor/bin/webdriver-manager start &
+./node_modules/protractor/bin/webdriver-manager update > /dev/null 2>&1
+./node_modules/protractor/bin/webdriver-manager start > /dev/null 2>&1 &
 
 # wait for port 4444 to listen for connections
 while ! nc -z 127.0.0.1 4444; do sleep 1; done

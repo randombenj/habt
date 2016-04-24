@@ -5,16 +5,16 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
-    "karma": "~0.13.22",
+    "angular-mocks": "~1.5.5",
     "jasmine-core": "~2.4.1",
-    "karma-jasmine": "~0.3.8",
+    "jasmine-jquery": "~2.1.1",
+    "jasmine-spec-reporter": "^2.4.0",
+    "karma": "~0.13.22",
     "karma-chrome-launcher": "~0.2.3",
     "karma-coverage": "~0.5.5",
-    "angular-mocks": "~1.5.5",
-    "jasmine-jquery": "~2.1.1",
+    "karma-jasmine": "~0.3.8",
     "karma-jasmine-html-reporter": "~0.2.0",
-    "protractor": "~2.5.1",
-    "protractor-html-screenshot-reporter": "0.0.21"
+    "protractor": "~2.5.1"
   },
   "scripts": {
     "test": "npm run-script test.unit && npm run-script test.e2e",

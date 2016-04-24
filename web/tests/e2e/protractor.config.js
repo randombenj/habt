@@ -1,4 +1,4 @@
-var reporter = require('protractor-html-screenshot-reporter');
+var SpecReporter = require('jasmine-spec-reporter');
 
 /**
  * The protractor test engine config
@@ -7,7 +7,7 @@ var reporter = require('protractor-html-screenshot-reporter');
 exports.config = {
 
   // use jasmine as testing framework
-  framework: 'jasmine',
+  framework: 'jasmine2',
 
   // bind to the running browser
   seleniumAddress: 'http://localhost:4444/wd/hub',
@@ -24,10 +24,12 @@ exports.config = {
     {'browserName': 'firefox'}
   ],
 
+  jasmineNodeOpts: {
+    print: function() {}
+  },
+
   onPrepare: function() {
-      // Add a screenshot reporter and store screenshots to `/tmp/screnshots`:
-      jasmine.getEnv().addReporter(new reporter({
-         baseDirectory: '.coverage/'
-      }));
-   }
+    // Add spec reporter for beautiful output:
+    jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
+  }
 };

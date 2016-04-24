@@ -46,7 +46,7 @@
 
       </div>
 
-      <ul ng-show="results"  class="list-group">
+      <ul ng-show="results"  class="list-group" class="ng-cloak">
         <a class="list-group-item" ng-repeat="package in results" ng-click="clearResults()" href="/#/detail/{{ package.name }}">
           <b>{{ package.name }}</b>
           <div class="pull-right">
