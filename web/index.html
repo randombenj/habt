@@ -36,7 +36,7 @@
           </span>
         </div>
 
-        <input type="text" ng-model="searchQuery" ng-change="change()" class="form-control" id="package-search" placeholder="Packages">
+        <input type="text" ng-model="searchQuery" ng-change="change()" ng-model-options="{debounce:100}" class="form-control" id="package-search" placeholder="Packages">
 
         <span class="input-group-btn">
           <button class="btn btn-secondary" type="button" ng-click="change()">
@@ -46,7 +46,7 @@
 
       </div>
 
-      <ul ng-show="results"  class="list-group">
+      <ul ng-show="results"  class="list-group" class="ng-cloak">
         <a class="list-group-item" ng-repeat="package in results" ng-click="clearResults()" href="/#/detail/{{ package.name }}">
           <b>{{ package.name }}</b>
           <div class="pull-right">

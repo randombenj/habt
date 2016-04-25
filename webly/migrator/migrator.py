@@ -12,10 +12,14 @@ log = logging.getLogger(__name__)
 
 
 class Migrator():
-    def __init__(self):
-        self._packages = Source(
-            os.path.join(os.path.dirname(__file__), 'sources.list')
-        ).packages
+    def __init__(self, source_list_file):
+        '''
+            Initializes the migrator
+
+            source_list_file:
+             The path to the source.list config file
+        '''
+        self._packages = Source(source_list_file).packages
 
     def run(self):
         '''

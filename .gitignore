@@ -3,4 +3,13 @@
 *.list
 __pycache__/
 webly.log
+
+# bower libs
 web/assets/lib/*
+
+# node modules
+web/node_modules/
+
+# code coverage
+.coverage
+webly/htmlcov

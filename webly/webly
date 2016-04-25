@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import os
 import click
 import logging
 from webly.database import drop, create
@@ -11,7 +12,7 @@ from webly.config import Config
 def init():
     drop()
     create()
-    Migrator().run()
+    Migrator(os.path.join(os.path.dirname(__file__), 'sources.list')).run()
 
 if __name__ == '__main__':
     # Setup the logger configuration
