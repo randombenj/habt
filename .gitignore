@@ -13,3 +13,8 @@ web/node_modules/
 # code coverage
 .coverage
 webly/htmlcov
+
+# documentation generation
+webly/docs/_build/
+webly/docs/_static/
+webly/docs/_templates/

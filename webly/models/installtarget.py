@@ -15,45 +15,58 @@ association_table = Table(
 
 class InstallTarget(GetOrCreateMixin, Base):
     __tablename__ = 'installtarget'
+    ''' Database table name '''
+
     id = Column(Integer, primary_key=True)
+    ''' Unique id on the database '''
+
     package_versions = relationship(
         "PackageVersion",
         secondary=association_table,
         back_populates="installtargets"
     )
+    ''' All package versions matching this installtarget '''
 
     archive_id = Column(
         Integer,
         ForeignKey('archive.id')
     )
+    ''' Id of the package archive '''
     archive = relationship(
         "Archive",
         back_populates="installtargets"
     )
+    ''' The package archive '''
 
     distribution_id = Column(
         Integer,
         ForeignKey('distribution.id')
     )
+    ''' Id of the distribution '''
     distribution = relationship(
         "Distribution",
         back_populates="installtargets"
     )
+    ''' The distribution '''
 
     part_id = Column(
         Integer,
         ForeignKey('part.id')
     )
+    ''' Id of the part '''
     part = relationship(
         "Part",
         back_populates="installtargets"
     )
+    ''' The part '''
 
     architecture_id = Column(
         Integer,
         ForeignKey('architecture.id')
     )
+    ''' Id of the architecture '''
     architecture = relationship(
         "Architecture",
         back_populates="installtargets"
     )
+    ''' The architecture '''
