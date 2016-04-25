@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.callout.css" />
     <link rel="stylesheet" href="/assets/lib/font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href="/assets/lib/hint.css/hint.css" />
+    <link rel="stylesheet" href="/assets/lib/intro.js/minified/introjs.min.css" />
 
     <!-- load custom stylesheet last, to overwrite bootstrap if nescessary -->
     <link rel="stylesheet" href="/assets/css/style.css" />
@@ -28,11 +29,11 @@
         </button>
       </div>
 
-      <div class="input-group">
+      <div class="input-group" data-intro='Search for debian packages by their name, you can use regular expressions.'>
 
-        <div class="input-group-addon">
-          <span class="hint--right" data-hint="Search for debian packages">
-            <i class="fa fa-archive"></i>
+        <div class="input-group-addon" id="start-intro">
+          <span class="hint--right" data-hint="Take a tour">
+            <i class="fa fa-question"></i>
           </span>
         </div>
 
@@ -82,6 +83,7 @@
     <script src="/assets/lib/angular-route/angular-route.js"></script>
     <script src="/assets/lib/clipboard/dist/clipboard.js"></script>
     <script src="/assets/lib/ngclipboard/dist/ngclipboard.js"></script>
+    <script src="/assets/lib/intro.js/minified/intro.min.js"></script>
 
     <!-- load the 'webly' angular module -->
     <script src="/app/app.module.js"></script>
@@ -89,6 +91,25 @@
     <!-- load the 'webly' application components -->
     <script src="/app/components/search/search.controller.js"></script>
     <script src="/app/components/detail/detail.controller.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        $('#start-intro').click(function () {
+          var intro = introJs();
+          // show only visible intros
+          var elements = $('[data-intro]:visible').map(function(i, e) {
+            return {
+              element: e,
+              intro: $(e).data('intro')
+            }
+          });
+          intro.setOptions({
+            steps: elements
+          });
+          introJs().start();
+        });
+      });
+    </script>
 
   </body>
 </html>
