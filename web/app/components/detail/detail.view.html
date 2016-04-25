@@ -3,17 +3,17 @@
 <h1>
   {{ package.name }}
 
-  <small class="pull-right" ng-show="version">
+  <small class="pull-right" ng-show="version"  data-intro="See the latest version of the package">
       {{ version.version }}
 
 
-        <a ng-show="version.homepage" target="_blank" class="hint--left package-homepage" data-hint="Homepage of this Package" href="{{ version.homepage }}">
+        <a ng-show="version.homepage" target="_blank" class="hint--left package-homepage" data-intro="Go to the official homepage of the package" data-hint="Homepage of this Package" href="{{ version.homepage }}">
           <i class="fa fa-external-link"></i>
         </a>
   </small>
 </h1>
 
-<div ng-show="package.referenced_by.length" class="panel panel-default">
+<div ng-show="package.referenced_by.length" class="panel panel-default" data-intro="View packages that reference this package">
 
   <div  class="panel-heading">
     <b class="hint--right" data-hint="{{ package.name }} is referenced by these packages" >Referenced by</b>
@@ -34,7 +34,7 @@
 
 <h3 ng-show="package">Available Versions</h3>
 
-<ul class="list-group">
+<ul class="list-group" data-intro="Choose from one of the available versions">
   <a
     class="list-group-item"
     ng-repeat="packageVersion in package.versions"
@@ -62,7 +62,7 @@
 
 <div ng-show="version">
 
-  <div class="bs-callout bs-callout-default">
+  <div class="bs-callout bs-callout-default" data-intro="See informations about the title, maintainer and link to the sourcecode">
     <h4>{{ version.title }}</h4>
     <p class="paragraph-text ">{{ version.description }}</p>
 
@@ -79,7 +79,7 @@
 
   <h4>Package sources</h4>
 
-  <div ng-repeat="target in version.installtargets" class="panel panel-default">
+  <div ng-repeat="target in version.installtargets" class="panel panel-default" data-intro="See where the package is located on the server">
     <div class="panel-heading">
 
       <div class="row">
@@ -120,7 +120,7 @@
 
   <h4>Package dependencies</h4>
 
-  <div ng-repeat="section in version.dependencies" class="panel panel-default">
+  <div ng-repeat="section in version.dependencies" class="panel panel-default" data-intro="View the package dependencies divided into sections">
 
     <div  class="panel-heading">
       <b>{{ section.section }}</b>
