@@ -47,6 +47,25 @@ The nginx webserver configures the routes for the static mapping in
 Additionaly nginx also installs the bower dependencies for the
 angular application.
 
+Import package metadata using the importer
+-----------------------------------------
+
+To fill the database with packages you can use the importer.
+
+.. note::
+   To execute the importer script in a docker container,
+   you can start a shell in the container by running: ``docker exec -it webly_web_1 bash``
+
+Once in the docker container you have to create a ``sources.list`` file
+containing the sources.list entries to import the metadata from.
+
+After this you can start the import by running:
+
+.. code-block:: bash
+
+  python webly
+
+
 Build this documentation
 ------------------------
 
