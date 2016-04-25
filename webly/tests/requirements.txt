@@ -1,2 +1,2 @@
-radish
+radish-bdd
 coverage

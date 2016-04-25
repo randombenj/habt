@@ -4,17 +4,24 @@ import os
 import click
 import logging
 from webly.database import drop, create
-from webly.migrator import Migrator
+from webly.importer import Importer
 from webly.config import Config
 
 
 @click.command()
-def init():
+@click.option('--sources',
+    default=os.path.join(
+        os.path.dirname(__file__),
+        'sources.list'
+    )
+)
+def start_import(sources):
     drop()
     create()
-    Migrator(os.path.join(os.path.dirname(__file__), 'sources.list')).run()
+    Importer(sources).run()
+
 
 if __name__ == '__main__':
     # Setup the logger configuration
     Config.setup_logger(level=logging.DEBUG)
-    init()
+    start_import()

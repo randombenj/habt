@@ -13,7 +13,7 @@ from webly.models import (
     Distribution,
     Part
 )
-from webly.migrator.helper import timeit
+from webly.importer.helper import timeit
 from webly.database import session
 
 import logging
@@ -21,20 +21,20 @@ import logging
 log = logging.getLogger(__name__)
 
 
-class PackageMigrator():
+class PackageImporter():
     def __init__(self, packages):
         self._packages = packages
 
     @timeit
     def run(self):
         '''
-            Runs all the migrator parts
+            Runs all the Importer parts
         '''
         self.packages()
 
     def packages(self):
         '''
-            Migrates the packages
+            Imports the packages
         '''
         for source in self._packages:
 

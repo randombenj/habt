@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# prepare tests by running the migrator
+# prepare tests by running the importer
 # docker exec -it webly_web_1 python webly
 
 # source:

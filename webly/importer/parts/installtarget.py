@@ -5,7 +5,7 @@ from webly.models import (
     Distribution,
     Archive
 )
-from webly.migrator.helper import timeit
+from webly.importer.helper import timeit
 from webly.database import session
 
 import logging
@@ -13,12 +13,12 @@ import logging
 log = logging.getLogger(__name__)
 
 
-class InstallTargetMigrator():
+class InstallTargetImporter():
 
     @timeit
     def run(self, packages):
         '''
-            Migrates the install targets sections
+            Imports the install targets sections
         '''
         for entry in packages:
             source_list_entry = entry['Entry']

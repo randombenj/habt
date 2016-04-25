@@ -1,29 +1,29 @@
-webly.migrator.parts package
+webly.importer.parts package
 ============================
 
 Submodules
 ----------
 
-webly.migrator.parts.dependency_sections module
+webly.importer.parts.dependency_sections module
 -----------------------------------------------
 
-.. automodule:: webly.migrator.parts.dependency_sections
+.. automodule:: webly.importer.parts.dependency_sections
     :members:
     :undoc-members:
     :show-inheritance:
 
-webly.migrator.parts.installtarget module
+webly.importer.parts.installtarget module
 -----------------------------------------
 
-.. automodule:: webly.migrator.parts.installtarget
+.. automodule:: webly.importer.parts.installtarget
     :members:
     :undoc-members:
     :show-inheritance:
 
-webly.migrator.parts.package module
+webly.importer.parts.package module
 -----------------------------------
 
-.. automodule:: webly.migrator.parts.package
+.. automodule:: webly.importer.parts.package
     :members:
     :undoc-members:
     :show-inheritance:
@@ -32,7 +32,7 @@ webly.migrator.parts.package module
 Module contents
 ---------------
 
-.. automodule:: webly.migrator.parts
+.. automodule:: webly.importer.parts
     :members:
     :undoc-members:
     :show-inheritance:

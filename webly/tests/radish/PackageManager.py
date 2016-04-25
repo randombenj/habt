@@ -4,7 +4,7 @@ from webly.api import app
 from radish import given, when, then, before
 
 from webly.database import drop, create, session
-from webly.migrator import Migrator
+from webly.importer import Importer
 from webly.manager import PackageManager
 from webly.models import Package
 
@@ -18,11 +18,11 @@ def _dict_response(response):
 
 
 @before.each_feature
-def migrate_database(scenario):
+def import_database(scenario):
     session.remove()
     drop()
     create()
-    Migrator('sources.list').run()
+    Importer('sources.list').run()
 
 
 @given("The api is ready")

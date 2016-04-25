@@ -1,4 +1,4 @@
-webly.migrator package
+webly.importer package
 ======================
 
 Subpackages
@@ -6,31 +6,31 @@ Subpackages
 
 .. toctree::
 
-    webly.migrator.parts
+    webly.importer.parts
 
 Submodules
 ----------
 
-webly.migrator.helper module
+webly.importer.helper module
 ----------------------------
 
-.. automodule:: webly.migrator.helper
+.. automodule:: webly.importer.helper
     :members:
     :undoc-members:
     :show-inheritance:
 
-webly.migrator.migrator module
+webly.importer.importer module
 ------------------------------
 
-.. automodule:: webly.migrator.migrator
+.. automodule:: webly.importer.importer
     :members:
     :undoc-members:
     :show-inheritance:
 
-webly.migrator.source module
+webly.importer.source module
 ----------------------------
 
-.. automodule:: webly.migrator.source
+.. automodule:: webly.importer.source
     :members:
     :undoc-members:
     :show-inheritance:
@@ -39,7 +39,7 @@ webly.migrator.source module
 Module contents
 ---------------
 
-.. automodule:: webly.migrator
+.. automodule:: webly.importer
     :members:
     :undoc-members:
     :show-inheritance:

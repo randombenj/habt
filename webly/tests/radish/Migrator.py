@@ -1,7 +1,7 @@
 from radish import given, when, then, arg_expr
 
 from webly.database import drop, create, session
-from webly.migrator import Migrator
+from webly.importer import Importer
 from webly.models import Package
 
 
@@ -24,9 +24,9 @@ def have_numbers(step):
     create()
 
 
-@when("I run a migration for {source_list:list}")
+@when("I run an import for {source_list:list}")
 def sum_numbers(step, source_list):
-    Migrator(source_list).run()
+    Importer(source_list).run()
 
 
 @then("I expect there top be packages in the database")

@@ -1,5 +1,5 @@
 from webly.models import DependencySection
-from webly.migrator.helper import timeit
+from webly.importer.helper import timeit
 from webly.database import session
 
 import logging
@@ -7,12 +7,12 @@ import logging
 log = logging.getLogger(__name__)
 
 
-class DependencySectionMigrator():
+class DependencySectionImporter():
 
     @timeit
     def run(self):
         '''
-            Migrates the dependency sections
+            Imports the dependency sections
         '''
         sections = [
             'depends',

@@ -2,7 +2,7 @@ import bz2
 import gzip
 import requests
 from deb822 import Packages, Release, Sources
-from webly.migrator.helper import Descriptions, Contents
+from webly.importer.helper import Descriptions, Contents
 import logging
 
 log = logging.getLogger(__name__)

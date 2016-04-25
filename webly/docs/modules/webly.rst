@@ -7,7 +7,7 @@ Subpackages
 .. toctree::
 
     webly.manager
-    webly.migrator
+    webly.importer
     webly.models
 
 Submodules
