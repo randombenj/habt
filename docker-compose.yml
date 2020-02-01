@@ -1,37 +1,36 @@
-web:
-  restart: "always"
-  build: ./webly
-  expose:
-    - "8000"
-  links:
-    - postgres:postgres
-  env_file: .env
-  volumes:
-    - ./webly:/usr/src/webly
-  command: "/usr/local/bin/gunicorn -w 2 -b :8000 api:app"
+version: '3'
+services:
+    web:
+      restart: "always"
+      build: ./habt
+      expose:
+        - "8000"
+      links:
+        - postgres:postgres
+      env_file: .env
+      volumes:
+        - ./habt:/usr/src/habt
+      command: "/usr/local/bin/gunicorn -w 2 -b :8000 api:app"
 
-nginx:
-  restart: "always"
-  build: .
-  dockerfile: nginx/Dockerfile
-  ports:
-    - "80:80"
-  volumes:
-    - ./web:/www/webly
-  links:
-    - web:web
+    nginx:
+      restart: "always"
+      build:
+        context: .
+        dockerfile: nginx/Dockerfile
+      ports:
+        - "80:80"
+      volumes:
+        - ./web:/www/habt
+      links:
+        - web:web
 
-data:
-  restart: "no"
-  image: postgres:latest
-  volumes:
-    - /var/lib/postgresql
-  command: "true"
+    postgres:
+      restart: "always"
+      image: postgres:latest
+      volumes:
+        - db-data:/var/lib/postgresql
+      ports:
+        - "5432:5432"
 
-postgres:
-  restart: "always"
-  image: postgres:latest
-  volumes_from:
-    - data
-  ports:
-    - "5432:5432"
+volumes:
+  db-data:

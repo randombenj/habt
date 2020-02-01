@@ -1,8 +1,8 @@
 (function () {
   'use strict';
 
-  // declare the 'webly' module
-  var webly = angular.module( 'webly', [
+  // declare the 'habt' module
+  var habt = angular.module( 'habt', [
     // angular router plugin
     'ngRoute',
     // angular clipboard plugin
@@ -10,7 +10,7 @@
   ]);
 
   // define routes using the route provider (angular router)
-  webly.config( [ '$routeProvider', function( $routeProvider ) {
+  habt.config( [ '$routeProvider', function( $routeProvider ) {
 
     // configure the routes
     $routeProvider

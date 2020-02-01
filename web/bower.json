@@ -1,9 +1,9 @@
 {
-  "name": "webly",
+  "name": "habt",
   "authors": [
     "Benj Fassbind <randombenj@gmail.com>"
   ],
-  "description": "Webly Web Frontend",
+  "description": "habt Web Frontend",
   "main": "app.module.js",
   "keywords": [
     "Debian",

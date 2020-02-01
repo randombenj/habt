@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # prepare tests by running the importer
-# docker exec -it webly_web_1 python webly
+# docker exec -it habt_web_1 python habt
 
 # source:
 #  http://stackoverflow.com/a/35218558

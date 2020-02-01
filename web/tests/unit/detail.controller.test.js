@@ -11,8 +11,8 @@ describe( 'The Detail Controller', function () {
     requestHandler,
     $rootScope;
 
-  // angular 'webly' module
-  beforeEach(module('webly'));
+  // angular 'habt' module
+  beforeEach(module('habt'));
 
   /**
    * Use the $injector to create the controller factory

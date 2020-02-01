@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('webly')
+    .module('habt')
     .controller( 'DetailController', DetailController );
 
   /**

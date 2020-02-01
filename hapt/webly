@@ -1,0 +1,27 @@
+#!/usr/bin/python3
+
+import os
+import click
+import logging
+from habt.database import drop, create
+from habt.importer import Importer
+from habt.config import Config
+
+
+@click.command()
+@click.option('--sources',
+    default=os.path.join(
+        os.path.dirname(__file__),
+        'sources.list'
+    )
+)
+def start_import(sources):
+    drop()
+    create()
+    Importer(sources).run()
+
+
+if __name__ == '__main__':
+    # Setup the logger configuration
+    Config.setup_logger(level=logging.DEBUG)
+    start_import()

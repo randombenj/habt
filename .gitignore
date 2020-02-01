@@ -2,7 +2,7 @@
 .env
 *.list
 __pycache__/
-webly.log
+habt.log
 
 # bower libs
 web/assets/lib/*
@@ -12,9 +12,9 @@ web/node_modules/
 
 # code coverage
 .coverage
-webly/htmlcov
+habt/htmlcov
 
 # documentation generation
-webly/docs/_build/
-webly/docs/_static/
-webly/docs/_templates/
+habt/docs/_build/
+habt/docs/_static/
+habt/docs/_templates/

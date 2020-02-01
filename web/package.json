@@ -1,5 +1,5 @@
 {
-  "name": "webly",
+  "name": "habt",
   "version": "0.0.0",
   "description": "Web based visualization of a debian linux package server",
   "main": "index.js",
@@ -22,7 +22,7 @@
     "test.e2e": "tests/e2e/test.executor"
   },
   "keywords": [
-    "webly",
+    "habt",
     "debian",
     "packages",
     "web",

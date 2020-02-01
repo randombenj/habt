@@ -10,8 +10,8 @@ describe( 'The Search Controller', function () {
     create,
     requestHandler;
 
-  // angular 'webly' module
-  beforeEach(module('webly'));
+  // angular 'habt' module
+  beforeEach(module('habt'));
 
   /**
    * Use the $injector to create the controller factory
