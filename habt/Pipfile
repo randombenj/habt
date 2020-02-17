@@ -1,0 +1,28 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+flake8-isort = "*"
+pytest = "*"
+pytest-cov = "*"
+
+[packages]
+click = "*"
+gunicorn = "*"
+flask-swagger = "*"
+flask-jsontools = "*"
+requests = "*"
+python-debian = "*"
+chardet = "*"
+Flask = "*"
+Flask-Cors = "*"
+SQLAlchemy = "*"
+
+[requires]
+python_version = "3"
+
+[pipenv]
+allow_prereleases = true

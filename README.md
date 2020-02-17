@@ -2,6 +2,8 @@
 
 **Find your debian packages.**
 
+[![build](https://github.com/randombenj/habt/workflows/habt%20ci/badge.svg)](https://github.com/randombenj/habt/actions)
+
 **habt** (/hʌbt/) is a simple web frontend for debian repositories.
 
 It can be configured with [sources list](https://wiki.debian.org/SourcesList#sources.list_format)
@@ -10,24 +12,13 @@ browse the packages in a fancy web ui.
 
 ## Getting started
 
-To run habt, you must first create a `.env` file, for the
-database to connect to:
+The simplest way to run the application is to run it in
+a docker container:
 
 ```sh
-DEBUG=True
-DB_NAME=postgres
-DB_USER=postgres
-DB_PASS=postgres
-DB_SERVICE=postgres
-DB_PORT=5432
+docker build -t habt .
+docker run -p 80:8000 habt
 ```
 
-After configuring the database you can start the application
-with [docker-compose](https://docs.docker.com/compose/):
-
-```sh
-docker-compose build
-docker-compose up [-d]
-```
-
-For more details, have a look at the [setup guide](habt/docs/parts/setup.rst).
+---
+Thanks [@lueschem](https://github.com/lueschem) for the idea!
