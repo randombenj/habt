@@ -1,33 +1,41 @@
 {
-  "name": "habt",
-  "version": "0.0.0",
-  "description": "Web based visualization of a debian linux package server",
-  "main": "index.js",
-  "dependencies": {},
-  "devDependencies": {
-    "angular-mocks": "~1.5.5",
-    "jasmine-core": "~2.4.1",
-    "jasmine-jquery": "~2.1.1",
-    "jasmine-spec-reporter": "^2.4.0",
-    "karma": "~0.13.22",
-    "karma-chrome-launcher": "~0.2.3",
-    "karma-coverage": "~0.5.5",
-    "karma-jasmine": "~0.3.8",
-    "karma-jasmine-html-reporter": "~0.2.0",
-    "protractor": "~2.5.1"
-  },
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "npm run-script test.unit && npm run-script test.e2e",
-    "test.unit": "./node_modules/karma/bin/karma start tests/unit/karma.config.js",
-    "test.e2e": "tests/e2e/test.executor"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
-  "keywords": [
-    "habt",
-    "debian",
-    "packages",
-    "web",
-    "vizualisation",
-    "linux"
-  ],
-  "author": "Benj Fassbind <randombenj@gmail.com>"
+  "dependencies": {
+    "core-js": "^3.6.4",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.2.0",
+    "@vue/cli-plugin-eslint": "~4.2.0",
+    "@vue/cli-service": "~4.2.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.1.2",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
 }
