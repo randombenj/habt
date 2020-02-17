@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
-import os
-import click
 import logging
-from habt.database import drop, create
-from habt.importer import Importer
+import os
+
+import click
+
 from habt.config import Config
+from habt.database import create, drop
+from habt.importer import Importer
 
 
 @click.command()

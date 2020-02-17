@@ -1,14 +1,13 @@
 from itertools import groupby
+
 from sqlalchemy.orm import joinedload
 
-from habt.database import session
 from habt.models import Package, PackageVersion
 
 
-class PackageManager():
-
+class PackageManager:
     def search_packages(self, query):
-        '''
+        """
             query:
              The given search query to search for in
              the database
@@ -18,68 +17,60 @@ class PackageManager():
              the search results as a list from the database
 
              { "results": [ ... ] }
-        '''
-        results = (Package.query
-            .filter(
+        """
+        results = (
+            Package.query.filter(
                 # filter for the name
-                Package.name.like("%{0}%".format(query)) |
+                Package.name.like("%{0}%".format(query))
+                |
                 # also allow regular expressions
-                Package.name.op('REGEXP')(query)
+                Package.name.op("REGEXP")(query)
             )
             # load all available versions
-            .options(
-                joinedload('versions')
-                    .load_only('version')
-            )
+            .options(joinedload("versions").load_only("version"))
             .order_by(Package.name)
             .limit(50)
             .all()
         )
-        return {'results': results}
+        return {"results": results}
 
     def get_package(self, package_name):
-        '''
+        """
             package_name:
              The Package to search for in the Database
 
             returns:
              A json serializable results dictionary
              with the loaded package
-        '''
+        """
         return {
-            'package': (Package.query
-                .filter(
-                    Package.name == package_name
-                )
+            "package": (
+                Package.query.filter(Package.name == package_name)
                 # options to load the required joined data
                 .options(
                     # load all versions of the package
-                    joinedload('versions'),
-
+                    joinedload("versions"),
                     # load the part the installtarget
-                    joinedload('versions')
-                        .joinedload('installtargets')
-                            .joinedload('part'),
+                    joinedload("versions")
+                    .joinedload("installtargets")
+                    .joinedload("part"),
                     # load the distribution the installtarget
-                    joinedload('versions')
-                        .joinedload('installtargets')
-                            .joinedload('distribution'),
-
+                    joinedload("versions")
+                    .joinedload("installtargets")
+                    .joinedload("distribution"),
                     # load all the packages depending on this package
-                    joinedload('referenced_by')
-                        .joinedload('package_version')
-                            .joinedload('package'),
+                    joinedload("referenced_by")
+                    .joinedload("package_version")
+                    .joinedload("package"),
                     # load all the dependency sections of the packages,
                     # depending on this package
-                    joinedload('referenced_by')
-                        .joinedload('dependency_section')
-
+                    joinedload("referenced_by").joinedload("dependency_section"),
                 )
             ).first()
         }
 
     def get_package_version(self, package_name, version=None):
-        '''
+        """
             package_name:
              The Package to search for in the Database
 
@@ -93,33 +84,23 @@ class PackageManager():
             returns:
              A json serializable results dictionary
              with the loaded package and version if any is given
-        '''
-        version = (PackageVersion.query
-            .join(Package)
-            .filter(
-                Package.name == package_name,
-                PackageVersion.version == version
-            )
+        """
+        version = (
+            PackageVersion.query.join(Package)
+            .filter(Package.name == package_name, PackageVersion.version == version)
             .options(
                 # load the dependencies and packages
-                joinedload('dependencies')
-                    .joinedload('package'),
+                joinedload("dependencies").joinedload("package"),
                 # load the dependency sections
-                joinedload('dependencies')
-                    .joinedload('dependency_section'),
-
+                joinedload("dependencies").joinedload("dependency_section"),
                 # load the part the installtarget
-                joinedload('installtargets')
-                    .joinedload('part'),
+                joinedload("installtargets").joinedload("part"),
                 # load the distribution the installtarget
-                joinedload('installtargets')
-                    .joinedload('distribution'),
+                joinedload("installtargets").joinedload("distribution"),
                 # load the archive the installtarget
-                joinedload('installtargets')
-                    .joinedload('archive'),
+                joinedload("installtargets").joinedload("archive"),
                 # load the architecture the installtarget
-                joinedload('installtargets')
-                    .joinedload('architecture'),
+                joinedload("installtargets").joinedload("architecture"),
             )
             .first()
         ).__json__()
@@ -128,14 +109,11 @@ class PackageManager():
         # displayed easily
         # The .__json__() call is required because sqlalchemy detects
         # changes on the model objects.
-        version['dependencies'] = [
-            {
-                'section': k.name,
-                'dependencies': list(g)
-            } for k, g in
-                groupby(
-                    version['dependencies'],
-                    lambda d: d.__json__()['dependency_section'])
+        version["dependencies"] = [
+            {"section": k.name, "dependencies": list(g)}
+            for k, g in groupby(
+                version["dependencies"], lambda d: d.__json__()["dependency_section"]
+            )
         ]
 
-        return {'version': version}
+        return {"version": version}

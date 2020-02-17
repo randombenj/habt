@@ -1,15 +1,14 @@
-from flask import Flask, jsonify
-from flask_jsontools import jsonapi, DynamicJSONEncoder
-from flask_cors import cross_origin
-from flask_swagger import swagger
+import logging
 
-from habt.database import session
-from habt.manager import PackageManager
+from flask import Flask, jsonify
+from flask_cors import cross_origin
+from flask_jsontools import DynamicJSONEncoder, jsonapi
+from flask_swagger import swagger
 
 # setup the configuration for the application
 from habt.config import Config
-
-import logging
+from habt.database import session
+from habt.manager import PackageManager
 
 # Configure the logger
 config = Config()
@@ -39,10 +38,10 @@ def spec():
     """
     swag = swagger(app)
     # api information
-    swag['info']['version'] = "0.0.0"
-    swag['info']['title'] = "habt API"
+    swag["info"]["version"] = "0.0.0"
+    swag["info"]["title"] = "habt API"
     # api prefix
-    swag['basePath'] = "/api"
+    swag["basePath"] = "/api"
     return jsonify(swag)
 
 
@@ -114,5 +113,6 @@ def version(name, version):
     """
     return PackageManager().get_package_version(name, version)
 
+
 if __name__ == "__main__":
-    app.run('0.0.0.0', port=8000)
+    app.run("0.0.0.0", port=8000)

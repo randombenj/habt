@@ -4,6 +4,7 @@
 __pycache__/
 habt.log
 habt.db
+.tox
 
 # bower libs
 web/assets/lib/*
