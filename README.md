@@ -10,24 +10,11 @@ browse the packages in a fancy web ui.
 
 ## Getting started
 
-To run habt, you must first create a `.env` file, for the
-database to connect to:
+The simplest way to run the application is to run it in
+a docker container. The container will create an
+sqlite database.
 
 ```sh
-DEBUG=True
-DB_NAME=postgres
-DB_USER=postgres
-DB_PASS=postgres
-DB_SERVICE=postgres
-DB_PORT=5432
+docker build -t habt .
+docker run -p 80:8000 habt
 ```
-
-After configuring the database you can start the application
-with [docker-compose](https://docs.docker.com/compose/):
-
-```sh
-docker-compose build
-docker-compose up [-d]
-```
-
-For more details, have a look at the [setup guide](habt/docs/parts/setup.rst).

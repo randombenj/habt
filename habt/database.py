@@ -1,4 +1,7 @@
-from sqlalchemy import create_engine
+import re
+
+from sqlalchemy import create_engine, event
+from sqlalchemy.engine import Engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -11,7 +14,7 @@ config = Config()
 engine = create_engine(
     config.connection_string,
     convert_unicode=True,
-    echo=False
+    echo=config.debug
 )
 
 session = scoped_session(
@@ -21,6 +24,14 @@ session = scoped_session(
         bind=engine
     )
 )
+
+
+@event.listens_for(Engine, "connect")
+def sqlite_engine_connect(dbapi_connection, connection_record):
+    def sqlite_regexp(expr, item):
+        reg = re.compile(expr, re.IGNORECASE)
+        return reg.search(item) is not None
+    dbapi_connection.create_function("regexp", 2, sqlite_regexp)
 
 
 class GetOrCreateMixin():
@@ -58,7 +69,7 @@ class GetOrCreateMixin():
             returns:
              A new or added instance
         '''
-        instance = cls.get_or_add(**kwargs)
+        instance = cls.get_or_create(**kwargs)
         if not instance.id:
             session.add(instance)
             session.commit()

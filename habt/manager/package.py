@@ -24,7 +24,7 @@ class PackageManager():
                 # filter for the name
                 Package.name.like("%{0}%".format(query)) |
                 # also allow regular expressions
-                Package.name.op('~')(query)
+                Package.name.op('REGEXP')(query)
             )
             # load all available versions
             .options(

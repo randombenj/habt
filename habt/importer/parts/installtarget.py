@@ -22,35 +22,34 @@ class InstallTargetImporter():
         '''
         for entry in packages:
             source_list_entry = entry['Entry']
-            archive = Archive.get_or_create(
+            archive = Archive.get_or_add(
                 url=source_list_entry.archive
             )
-            distribution = Distribution.get_or_create(
+            distribution = Distribution.get_or_add(
                 name=source_list_entry.distribution
             )
 
+
             for part in source_list_entry.parts:
-                db_part = Part.get_or_create(
+                db_part = Part.get_or_add(
                     name=part
                 )
 
                 for architecture in entry['Architectures']:
-                    session.add(InstallTarget(
+                    InstallTarget.get_or_add(
                         archive=archive,
                         distribution=distribution,
                         part=db_part,
-                        architecture=Architecture.get_or_create(
+                        architecture=Architecture.get_or_add(
                             name=architecture['Architecture']
                         )
-                    ))
+                    )
 
-                session.add(InstallTarget(
+                InstallTarget.get_or_add(
                     archive=archive,
                     distribution=distribution,
                     part=db_part,
-                    architecture=Architecture.get_or_create(
+                    architecture=Architecture.get_or_add(
                         name='all'
                     )
-                ))
-
-                session.commit()
+                )
