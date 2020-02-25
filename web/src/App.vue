@@ -1,18 +1,26 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <layout>
+    <md-autocomplete
+      v-model="selected"
+      :md-options="[]"
+      md-layout="box"
+      md-dense>
+      <label>Search debian packages</label>
+    </md-autocomplete>
+  </layout>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Layout from './components/Layout.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    Layout
+  },
+  data: () => ({
+    selected: null
+  })
 }
 </script>
 
