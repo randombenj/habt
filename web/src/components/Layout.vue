@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'layout',
+  name: 'Layout',
 }
 </script>
 <style lang="scss" scoped>
