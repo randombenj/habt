@@ -9,7 +9,9 @@ import {
   MdMenu,
   MdField,
   MdList,
-  MdButton
+  MdButton,
+  MdCard,
+  MdBadge
 } from 'vue-material/dist/components'
 
 import 'vue-material/dist/vue-material.min.css'
@@ -23,6 +25,8 @@ Vue.use(MdMenu)
 Vue.use(MdField)
 Vue.use(MdList)
 Vue.use(MdButton)
+Vue.use(MdCard)
+Vue.use(MdBadge)
 
 // configure vue router (https://router.vuejs.org/installation.html)
 import VueRouter from 'vue-router'

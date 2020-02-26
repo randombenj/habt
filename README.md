@@ -1,4 +1,4 @@
-![habt](docs/assets/habt-logo.png)
+![habt](web/src/assets/logo.png)
 
 **Find your debian packages.**
 
