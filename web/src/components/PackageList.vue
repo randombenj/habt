@@ -4,7 +4,7 @@
       <md-list>
         <md-list-item
           v-for="debPackage in packages"
-          :to="`/package/${debPackage.name}`"
+          :to="`/${debPackage.name}`"
           :key="debPackage.id"
         >
           <div class="md-list-item-text">
