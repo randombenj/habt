@@ -18,6 +18,9 @@ export default {
   methods: {
     search(query) {
       this.$store.dispatch('search/search', query)
+      if (this.$route.path !== '/') {
+        this.$router.replace('/')
+      }
     }
   }
 }
