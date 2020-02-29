@@ -20,5 +20,11 @@ docker build -t habt .
 docker run -p 80:8000 habt
 ```
 
+## How does it look like
+
+Here is a screenshot of how debian packages are shown:
+
+![habt screenshot](docs/assets/screenshot.png)
+
 ---
 Thanks [@lueschem](https://github.com/lueschem) for the idea!
