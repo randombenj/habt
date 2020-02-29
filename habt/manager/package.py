@@ -1,5 +1,3 @@
-from itertools import groupby
-
 from sqlalchemy.orm import joinedload
 
 from habt.models import Package, PackageVersion

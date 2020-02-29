@@ -1,47 +1,36 @@
 <template>
   <div>
-    <md-card v-if="packages.length" class="package-list-card">
+    <md-card class="package-list-card no-space">
       <md-list class="md-dense">
         <md-list-item
-          v-for="debPackage in packages"
-          :to="`/${debPackage.name}`"
-          :key="debPackage.id"
+          v-for="dependant in dependants"
+          :key="`${dependant.dependency_section_id}/${dependant.package_version_id}`"
         >
           <div class="md-list-item-text">
-            {{ debPackage.name }}
+            {{ dependant.package_version.package.name }} ({{ dependant.package_version.version }})
           </div>
           <md-badge
-            v-for="debVersion in debPackage.versions"
-            :key="debVersion.id"
-            :md-content="debVersion.version"
+            :md-content="dependant.dependency_section.name"
             class="md-square version-badge"
           />
         </md-list-item>
       </md-list>
     </md-card>
-    <img v-if="!packages.length" class="center" alt="logo" src="@/assets/logo.png" />
   </div>
 </template>
 
 <script>
+// FIXME: remove and combine with DependencyList ...
 export default {
-  name: 'PackageList',
+  name: 'DependantsList',
   props: {
-    packages: Array
+    dependants: Array
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   .package-list-card {
-    margin-left: 0px;
-    margin-right: 0px;
 
     .md-list-item-text {
       font-size: 1.2em;

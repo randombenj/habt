@@ -25,3 +25,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  .md-autocomplete {
+    margin-bottom: 0px;
+  }
+</style>
