@@ -34,10 +34,12 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 // configure the app's routing
-import Search from '@/pages/Search.vue'
+import PackageSearch from '@/pages/PackageSearch.vue'
+import PackageDetail from '@/pages/PackageDetail.vue'
 
 const routes = [
-  { path: '/', component: Search }
+  { path: '/', component: PackageSearch },
+  { path: '/:package/:version?', component: PackageDetail }
 ]
 
 const router = new VueRouter({

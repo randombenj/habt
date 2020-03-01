@@ -1,5 +1,3 @@
-from itertools import groupby
-
 from sqlalchemy.orm import joinedload
 
 from habt.models import Package, PackageVersion
@@ -43,7 +41,7 @@ class PackageManager:
              A json serializable results dictionary
              with the loaded package
         """
-        return {
+        package = {
             "package": (
                 Package.query.filter(Package.name == package_name)
                 # options to load the required joined data
@@ -68,6 +66,9 @@ class PackageManager:
                 )
             ).first()
         }
+
+        package["package"].referenced_by.sort(key=lambda d: d.dependency_section.name)
+        return package
 
     def get_package_version(self, package_name, version=None):
         """
@@ -105,15 +106,7 @@ class PackageManager:
             .first()
         ).__json__()
 
-        # group the package versions by theyr section, so they can be
-        # displayed easily
-        # The .__json__() call is required because sqlalchemy detects
-        # changes on the model objects.
-        version["dependencies"] = [
-            {"section": k.name, "dependencies": list(g)}
-            for k, g in groupby(
-                version["dependencies"], lambda d: d.__json__()["dependency_section"]
-            )
-        ]
+        # sort the dependencies by their section
+        version["dependencies"].sort(key=lambda d: d.dependency_section.name)
 
         return {"version": version}

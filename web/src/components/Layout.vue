@@ -24,3 +24,10 @@ export default {
     background-color: #fafafa !important;
   }
 </style>
+<style lang="scss">
+  /* common layouts */
+  .md-card.no-space {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+  }
+</style>

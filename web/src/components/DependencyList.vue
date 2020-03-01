@@ -1,33 +1,29 @@
 <template>
   <div>
-    <md-card v-if="packages.length" class="package-list-card">
+    <md-card class="package-list-card">
       <md-list class="md-dense">
         <md-list-item
-          v-for="debPackage in packages"
-          :to="`/${debPackage.name}`"
-          :key="debPackage.id"
+          v-for="dependency in dependencies"
+          :key="`${dependency.dependency_section_id}/${dependency.package_id}`"
         >
           <div class="md-list-item-text">
-            {{ debPackage.name }}
+            {{ dependency.package.name }} {{ dependency.version }}
           </div>
           <md-badge
-            v-for="debVersion in debPackage.versions"
-            :key="debVersion.id"
-            :md-content="debVersion.version"
+            :md-content="dependency.dependency_section.name"
             class="md-square version-badge"
           />
         </md-list-item>
       </md-list>
     </md-card>
-    <img v-if="!packages.length" class="center" alt="logo" src="@/assets/logo.png" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'PackageList',
+  name: 'DependencyList',
   props: {
-    packages: Array
+    dependencies: Array
   }
 }
 </script>
